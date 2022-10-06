@@ -101,8 +101,12 @@
               <template #append v-if="item.type === 'input' && item.suffix">{{ item.suffix }}</template>
             </component>
             <div class="btn">
-              <el-button @click.stop="copy(item)" size="small" circle :icon="Edit" plain type="primary"></el-button>
-              <el-button @click.stop="del(index)" size="small" circle :icon="Delete" plain type="danger"></el-button>
+              <el-tooltip content="复制">
+                <el-button @click.stop="copy(item)" size="small" circle :icon="Edit" plain type="primary"></el-button>
+              </el-tooltip>
+              <el-tooltip content="删除">
+                <el-button @click.stop="del(index)" size="small" circle :icon="Delete" plain type="danger"></el-button>
+              </el-tooltip>
             </div>
           </el-form-item>
         </template>
@@ -130,7 +134,7 @@ const dragover = (e: DragEvent) => {
 }
 const drop = (e: DragEvent) => {
   const item = JSON.parse(e.dataTransfer!.getData("item"))
-  item.field += Math.floor(Math.random() * 1000) 
+  item.field += Math.floor(Math.random() * 1000)
   localStorage.setItem("currentComponent", JSON.stringify(item))
   store.commit("setCurrentComponent", item)
   if (componentList.value && componentList.value.length) {
@@ -158,7 +162,6 @@ const clickItem = (item: ComponentItem, index: number) => {
 
 const copy = (item: ComponentItem) => {
   componentList.value.push(item)
-  console.log(componentList.value)
   localStorage.setItem("currentComponent", JSON.stringify(item))
   store.commit("setCurrentComponent", item)
   localStorage.setItem("componentList", JSON.stringify(componentList.value))

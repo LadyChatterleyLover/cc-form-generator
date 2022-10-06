@@ -39,6 +39,7 @@ import { saveAs } from "file-saver"
 import { CopyDocument, DeleteFilled, Download, VideoPlay } from "@element-plus/icons-vue"
 import { ComponentItem } from "@/types"
 import { vueTemplate } from "@/utils/template"
+import { useClipboard } from "@vueuse/core"
 
 interface ListItem {
   icon: Component
@@ -89,6 +90,18 @@ const clickItem = (item: ListItem) => {
   }
   if (item.name === "导出vue文件") {
     visible.value = true
+  }
+  if (item.name === "复制代码") {
+    const str = vueTemplate(componentList.value)
+    try {
+      const {copy} = useClipboard({
+        source: str,
+      })
+      copy()
+      ElMessage.success('复制成功')
+    } catch (err) {
+      ElMessage.error('复制失败')
+    }
   }
   if (item.name === "清空") {
     ElMessageBox.confirm("确认要清空所有组件吗?", "", {
