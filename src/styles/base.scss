@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app,
+.el-container {
+  height: 100%;
+}
+svg {
+  width: 1em;
+  height: 1em;
+}
+.cc-choose-icon-dialog-body-height {
+  .el-dialog__body {
+    height: 500px;
+    overflow: scroll;
+  }
+}
+.el-input__prefix {
+  align-items: center;
+}
+.rate-form-item-align-center {
+  .el-rate__item {
+    display: flex;
+    align-items: center;
+  }
+}
