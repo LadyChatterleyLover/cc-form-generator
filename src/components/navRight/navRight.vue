@@ -11,7 +11,8 @@
         <slider-attrs v-if="current.type === 'slider'"></slider-attrs>
         <radio-attrs v-if="current.type === 'radio-group'"></radio-attrs>
         <checkbox-attrs v-if="current.type === 'checkbox-group'"></checkbox-attrs>
-      
+        <select-attrs v-if="current.type === 'select'"></select-attrs>
+
         <!-- <el-divider>正则校验</el-divider>
         <validate></validate> -->
       </div>
@@ -308,6 +309,7 @@ import colorPickerAttrs from '../componentAttrs/colorPickerAttrs/index.vue'
 import sliderAttrs from '../componentAttrs/sliderAttrs/index.vue'
 import radioAttrs from '../componentAttrs/radioAttrs/index.vue'
 import checkboxAttrs from '../componentAttrs/checkboxAttrs/index.vue'
+import selectAttrs from '../componentAttrs/selectAttrs/index.vue'
 
 const store = useStore()
 

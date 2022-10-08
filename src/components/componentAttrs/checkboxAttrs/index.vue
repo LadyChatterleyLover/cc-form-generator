@@ -12,6 +12,13 @@
     <el-form-item label="标签宽度">
       <el-input-number v-model="current.labelWidth"></el-input-number>
     </el-form-item>
+    <el-form-item label="尺寸">
+      <el-select v-model="current.attrs.size" placeholder="请选择复选框尺寸">
+        <el-option value="default" label="默认"></el-option>
+        <el-option value="small" label="小型"></el-option>
+        <el-option value="large" label="大型"></el-option>
+      </el-select>
+    </el-form-item>
     <el-form-item label="复选框样式">
       <el-select v-model="buttonType" placeholder="请选择复选框样式" @change="changeButtonType">
         <el-option value="checkbox" label="默认"></el-option>
@@ -27,19 +34,9 @@
       </el-form-item>
     </template>
     <el-form-item label="选项配置">
-      <div
-        style="display: flex;margin-bottom: 10px;"
-        v-for="(item, index) in current.children"
-        :key="index"
-      >
+      <div style="display: flex; margin-bottom: 10px" v-for="(item, index) in current.children" :key="index">
         <el-input v-model="item.attrs.text" clearable placeholder="请输入导航标题"></el-input>
-        <el-button
-          style="margin: 0 3px;"
-          @click="edit(item, index)"
-          type="primary"
-          circle
-          :icon="Edit"
-        ></el-button>
+        <el-button style="margin: 0 3px" @click="edit(item, index)" type="primary" circle :icon="Edit"></el-button>
         <el-button @click="del(item, index)" type="danger" circle :icon="Delete"></el-button>
       </div>
       <el-button type="primary" size="small" @click="add">添加选项</el-button>
@@ -83,7 +80,7 @@
   </el-dialog>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { useStore } from 'vuex'
 import { computed, ComputedRef, ref, watch } from 'vue'
 import { ComponentItem } from '@/types'
@@ -98,9 +95,9 @@ const currentItem = ref<any>()
 const currentIndex = ref<number>(0)
 const buttonType = ref<'checkbox' | 'checkbox-button'>('checkbox')
 
-const changeButtonType = (val: 'checkbox' | 'checkbox-button') => {
+const changeButtonType = (val: any) => {
   current.value.children.map((item: ComponentItem) => {
-    item.type = val
+    item.type = val as 'checkbox' | 'checkbox-button'
   })
   localStorage.setItem('currentComponent', JSON.stringify(current.value))
   store.commit('setCurrentComponent', current.value)
@@ -111,7 +108,6 @@ const edit = (item: ComponentItem, index: number) => {
   currentIndex.value = index
   currentItem.value = cloneDeep(item)
 }
-
 
 const del = (item: ComponentItem, index: number) => {
   current.value.children.splice(index, 1)
@@ -136,16 +132,19 @@ const add = () => {
       label: String(current.value.children.length + 1),
       disabled: false,
       border: false,
-      size: ''
-    }
+      size: '',
+    },
   })
 }
 
-watch(() => current.value, val => {
-  localStorage.setItem('currentComponent', JSON.stringify(val))
-  store.commit('setCurrentComponent', val)
-}, { deep: true })
+watch(
+  () => current.value,
+  (val) => {
+    localStorage.setItem('currentComponent', JSON.stringify(val))
+    store.commit('setCurrentComponent', val)
+  },
+  { deep: true }
+)
 </script>
 
-<style lang='scss' scoped>
-</style>
+<style lang="scss" scoped></style>

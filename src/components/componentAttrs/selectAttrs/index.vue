@@ -19,23 +19,9 @@
         <el-option value="large" label="大型"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="单选框样式">
-      <el-select v-model="buttonType" placeholder="请选择单选框样式" @change="changeButtonType">
-        <el-option value="radio" label="默认"></el-option>
-        <el-option value="radio-button" label="按钮"></el-option>
-      </el-select>
-    </el-form-item>
-    <template v-if="buttonType === 'radio-button'">
-      <el-form-item label="文本颜色">
-        <el-color-picker v-model="current.attrs.textColor"></el-color-picker>
-      </el-form-item>
-      <el-form-item label="填充颜色">
-        <el-color-picker v-model="current.attrs.fill"></el-color-picker>
-      </el-form-item>
-    </template>
     <el-form-item label="选项配置">
       <div style="display: flex; margin-bottom: 10px" v-for="(item, index) in current.children" :key="index">
-        <el-input v-model="item.attrs.text" clearable placeholder="请输入导航标题"></el-input>
+        <el-input v-model="item.attrs.label" clearable placeholder="请输入导航标题"></el-input>
         <el-button style="margin: 0 3px" @click="edit(item, index)" type="primary" circle :icon="Edit"></el-button>
         <el-button @click="del(item, index)" type="danger" circle :icon="Delete"></el-button>
       </div>
@@ -53,24 +39,13 @@
     <el-form v-if="current" :model="current.children[currentIndex]" label-width="100px">
       <el-form-item label="绑定值">
         <el-input
-          v-model="current.children[currentIndex].attrs.label"
+          v-model="current.children[currentIndex].attrs.value"
           placeholder="请输入数据绑定值"
           clearable
         ></el-input>
       </el-form-item>
-      <el-form-item label="选项尺寸" v-if="current.children[currentIndex].type === 'radio-button'">
-        <el-select v-model="current.children[currentIndex].attrs.size" placeholder="请选择输入框尺寸">
-          <el-option value label="默认尺寸"></el-option>
-          <el-option value="medium" label="中号"></el-option>
-          <el-option value="small" label="小号"></el-option>
-          <el-option value="large" label="大号"></el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="是否禁用">
         <el-switch v-model="current.children[currentIndex].attrs.disabled"></el-switch>
-      </el-form-item>
-      <el-form-item label="显示边框" v-if="current.children[currentIndex].type === 'radio'">
-        <el-switch v-model="current.children[currentIndex].attrs.border"></el-switch>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -93,15 +68,6 @@ const current: ComputedRef<any> = computed(() => store.state.currentComponent)
 const editVisible = ref<boolean>(false)
 const currentItem = ref<any>()
 const currentIndex = ref<number>(0)
-const buttonType = ref<'radio' | 'radio-button'>('radio')
-
-const changeButtonType = (val: any) => {
-  current.value.children.map((item: ComponentItem) => {
-    item.type = val as 'radio' | 'radio-button'
-  })
-  localStorage.setItem('currentComponent', JSON.stringify(current.value))
-  store.commit('setCurrentComponent', current.value)
-}
 
 const edit = (item: ComponentItem, index: number) => {
   editVisible.value = true
@@ -126,13 +92,11 @@ const cancel = () => {
 
 const add = () => {
   current.value.children.push({
-    type: 'radio',
+    type: 'option',
     attrs: {
-      text: '选项' + (current.value.children.length + 1),
-      label: String(current.value.children.length + 1),
+      label: '选项' + (current.value.children.length + 1),
+      value: String(current.value.children.length + 1),
       disabled: false,
-      border: false,
-      size: '',
     },
   })
 }

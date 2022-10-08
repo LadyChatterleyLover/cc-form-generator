@@ -87,9 +87,23 @@
               v-model="item.value"
             >
               <template v-if="item.children && item.children.length">
-                <component v-for="(child, i) in item.children" :key="i" v-bind="child.attrs" :is="`el-${child.type}`">{{
-                  child.attrs.text
-                }}</component>
+                <template v-if="item.type === 'select'">
+                  <component
+                    v-for="(child, i) in item.children"
+                    :key="i"
+                    v-bind="child.attrs"
+                    :is="`el-${child.type}`"
+                  ></component>
+                </template>
+                <template v-else>
+                  <component
+                    v-for="(child, i) in item.children"
+                    :key="i"
+                    v-bind="child.attrs"
+                    :is="`el-${child.type}`"
+                    >{{ child.attrs.text }}</component
+                  >
+                </template>
               </template>
               <template #prefix v-if="item.type === 'input' && item.attrs.prefixIcon">
                 <component :is="`el-icon-${toLine(item.attrs.prefixIcon!)}`"></component>
@@ -116,12 +130,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ComputedRef, watch } from "vue"
-import { useStore } from "vuex"
-import { toLine } from "@/utils"
-import { ComponentItem } from "@/types"
-import { Edit, Delete } from "@element-plus/icons-vue"
-import * as Icons from "@element-plus/icons-vue"
+import { computed, ComputedRef, watch } from 'vue'
+import { useStore } from 'vuex'
+import { toLine } from '@/utils'
+import { ComponentItem } from '@/types'
+import { Edit, Delete } from '@element-plus/icons-vue'
+import * as Icons from '@element-plus/icons-vue'
 
 const store = useStore()
 
@@ -133,72 +147,72 @@ const dragover = (e: DragEvent) => {
   e.preventDefault()
 }
 const drop = (e: DragEvent) => {
-  const item = JSON.parse(e.dataTransfer!.getData("item"))
+  const item = JSON.parse(e.dataTransfer!.getData('item'))
   item.field += Math.floor(Math.random() * 1000)
-  localStorage.setItem("currentComponent", JSON.stringify(item))
-  store.commit("setCurrentComponent", item)
+  localStorage.setItem('currentComponent', JSON.stringify(item))
+  store.commit('setCurrentComponent', item)
   if (componentList.value && componentList.value.length) {
     componentList.value.push(item)
-    localStorage.setItem("componentList", JSON.stringify(componentList.value))
-    store.commit("setComponentList", componentList.value)
-    localStorage.setItem("activeIndex", String(componentList.value.length - 1))
-    store.commit("setActiveIndex", componentList.value.length - 1)
+    localStorage.setItem('componentList', JSON.stringify(componentList.value))
+    store.commit('setComponentList', componentList.value)
+    localStorage.setItem('activeIndex', String(componentList.value.length - 1))
+    store.commit('setActiveIndex', componentList.value.length - 1)
   } else {
     const arr = []
     arr.push(item)
-    localStorage.setItem("componentList", JSON.stringify(arr))
-    store.commit("setComponentList", arr)
-    localStorage.setItem("activeIndex", "0")
-    store.commit("setActiveIndex", 0)
+    localStorage.setItem('componentList', JSON.stringify(arr))
+    store.commit('setComponentList', arr)
+    localStorage.setItem('activeIndex', '0')
+    store.commit('setActiveIndex', 0)
   }
 }
 
 const clickItem = (item: ComponentItem, index: number) => {
-  localStorage.setItem("currentComponent", JSON.stringify(item))
-  store.commit("setCurrentComponent", item)
-  localStorage.setItem("activeIndex", String(index))
-  store.commit("setActiveIndex", index)
+  localStorage.setItem('currentComponent', JSON.stringify(item))
+  store.commit('setCurrentComponent', item)
+  localStorage.setItem('activeIndex', String(index))
+  store.commit('setActiveIndex', index)
 }
 
 const copy = (item: ComponentItem) => {
   componentList.value.push(item)
-  localStorage.setItem("currentComponent", JSON.stringify(item))
-  store.commit("setCurrentComponent", item)
-  localStorage.setItem("componentList", JSON.stringify(componentList.value))
-  store.commit("setComponentList", componentList.value)
-  localStorage.setItem("activeIndex", String(componentList.value.length - 1))
-  store.commit("setActiveIndex", componentList.value.length - 1)
+  localStorage.setItem('currentComponent', JSON.stringify(item))
+  store.commit('setCurrentComponent', item)
+  localStorage.setItem('componentList', JSON.stringify(componentList.value))
+  store.commit('setComponentList', componentList.value)
+  localStorage.setItem('activeIndex', String(componentList.value.length - 1))
+  store.commit('setActiveIndex', componentList.value.length - 1)
 }
 
 const del = (index: number) => {
   if (componentList.value.length !== 1) {
     componentList.value.splice(index, 1)
-    localStorage.setItem("currentComponent", JSON.stringify(componentList.value[componentList.value.length - 1]))
-    store.commit("setCurrentComponent", componentList.value[componentList.value.length - 1])
-    localStorage.setItem("componentList", JSON.stringify(componentList.value))
-    store.commit("setComponentList", componentList.value)
-    localStorage.setItem("activeIndex", String(componentList.value.length - 1))
-    store.commit("setActiveIndex", componentList.value.length - 1)
+    localStorage.setItem('currentComponent', JSON.stringify(componentList.value[componentList.value.length - 1]))
+    store.commit('setCurrentComponent', componentList.value[componentList.value.length - 1])
+    localStorage.setItem('componentList', JSON.stringify(componentList.value))
+    store.commit('setComponentList', componentList.value)
+    localStorage.setItem('activeIndex', String(componentList.value.length - 1))
+    store.commit('setActiveIndex', componentList.value.length - 1)
   } else {
-    store.commit("setComponentList", null)
-    store.commit("setCurrentComponent", null)
-    store.commit("setActiveIndex", null)
-    localStorage.removeItem("componentList")
-    localStorage.removeItem("currentComponent")
-    localStorage.removeItem("activeIndex")
+    store.commit('setComponentList', null)
+    store.commit('setCurrentComponent', null)
+    store.commit('setActiveIndex', null)
+    localStorage.removeItem('componentList')
+    localStorage.removeItem('currentComponent')
+    localStorage.removeItem('activeIndex')
   }
 }
 
 watch(
   () => currentComponent.value,
   (val) => {
-    localStorage.setItem("currentComponent", JSON.stringify(val))
-    store.commit("setCurrentComponent", val)
+    localStorage.setItem('currentComponent', JSON.stringify(val))
+    store.commit('setCurrentComponent', val)
 
     if (componentList.value && componentList.value.length) {
       componentList.value[activeIndex.value] = val
-      localStorage.setItem("componentList", JSON.stringify(componentList.value))
-      store.commit("setComponentList", componentList.value)
+      localStorage.setItem('componentList', JSON.stringify(componentList.value))
+      store.commit('setComponentList', componentList.value)
     }
   },
   { deep: true }
