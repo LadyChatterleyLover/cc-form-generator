@@ -14,6 +14,7 @@
         <select-attrs v-if="current.type === 'select'"></select-attrs>
         <cascader-attrs v-if="current.type === 'cascader'"></cascader-attrs>
         <time-picker-attrs v-if="current.type === 'time-picker'"></time-picker-attrs>
+        <date-picker-attrs v-if="current.type === 'date-picker'"></date-picker-attrs>
 
         <!-- <el-divider>正则校验</el-divider>
         <validate></validate> -->
@@ -314,6 +315,7 @@ import checkboxAttrs from '../componentAttrs/checkboxAttrs/index.vue'
 import selectAttrs from '../componentAttrs/selectAttrs/index.vue'
 import cascaderAttrs from '../componentAttrs/cascaderAttrs/index.vue'
 import timePickerAttrs from '../componentAttrs/timePickerAttrs/index.vue'
+import datePickerAttrs from '../componentAttrs/datePickerAttrs/index.vue'
 
 const store = useStore()
 

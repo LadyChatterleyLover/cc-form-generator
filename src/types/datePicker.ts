@@ -1,7 +1,7 @@
 import { CSSProperties } from 'vue'
 import { SizeProps } from './index'
 
-export interface TimePickerAttrs {
+export interface DatePickerAttrs {
   style?: CSSProperties
   readonly?: boolean
   disabled?: boolean
@@ -12,7 +12,7 @@ export interface TimePickerAttrs {
   placeholder?: string
   startPlaceholder?: string
   endPlaceholder?: string
-  isRange?: boolean
   format?: string
   rangeSeparator?: string
+  type?: 'year' | 'month' | 'date' | 'dates' | 'datetime' | 'week' | 'datetimerange' | 'daterange' | 'monthrange'
 }
