@@ -78,6 +78,10 @@
             <template v-else-if="item.type === 'cascader'">
               <el-cascader :options="item.children" v-bind="{ ...item.attrs }"></el-cascader>
             </template>
+            <template v-else-if="item.type === 'time-picker'">
+              <el-time-picker v-if="item.attrs.isRange" isRange v-bind="{ ...item.attrs }"></el-time-picker>
+              <el-time-picker v-else v-bind="{ ...item.attrs }"></el-time-picker>
+            </template>
             <component
               v-else
               :is="`el-${item.type}`"

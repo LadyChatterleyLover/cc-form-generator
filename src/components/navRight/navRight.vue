@@ -13,6 +13,7 @@
         <checkbox-attrs v-if="current.type === 'checkbox-group'"></checkbox-attrs>
         <select-attrs v-if="current.type === 'select'"></select-attrs>
         <cascader-attrs v-if="current.type === 'cascader'"></cascader-attrs>
+        <time-picker-attrs v-if="current.type === 'time-picker'"></time-picker-attrs>
 
         <!-- <el-divider>正则校验</el-divider>
         <validate></validate> -->
@@ -312,6 +313,7 @@ import radioAttrs from '../componentAttrs/radioAttrs/index.vue'
 import checkboxAttrs from '../componentAttrs/checkboxAttrs/index.vue'
 import selectAttrs from '../componentAttrs/selectAttrs/index.vue'
 import cascaderAttrs from '../componentAttrs/cascaderAttrs/index.vue'
+import timePickerAttrs from '../componentAttrs/timePickerAttrs/index.vue'
 
 const store = useStore()
 

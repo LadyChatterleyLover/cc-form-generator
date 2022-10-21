@@ -9,6 +9,7 @@ import { SliderAttrs } from './sliderAttrs'
 import { SwitchAttrs } from './switchAttrs'
 import { SelectAttrs } from './selectAttrs'
 import { CascaderAttrs } from './cascaderAttrs'
+import { TimePickerAttrs } from './timePicker'
 import { RuleItem } from './rules'
 
 export type SizeProps = '' | 'large' | 'small' | 'default'
@@ -60,4 +61,5 @@ export interface ComponentItem {
     | CheckboxAttrs
     | SelectAttrs
     | CascaderAttrs
+    | TimePickerAttrs
 }
