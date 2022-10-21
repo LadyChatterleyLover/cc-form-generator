@@ -8,13 +8,14 @@ import { RateAttrs } from './rateAttrs'
 import { SliderAttrs } from './sliderAttrs'
 import { SwitchAttrs } from './switchAttrs'
 import { SelectAttrs } from './selectAttrs'
+import { CascaderAttrs } from './cascaderAttrs'
 import { RuleItem } from './rules'
 
 export type SizeProps = '' | 'large' | 'small' | 'default'
 export type TypeProps = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'text'
 
 export interface ComponentItem {
-  type:
+  type?:
     | 'button'
     | 'cascader'
     | 'checkbox'
@@ -47,7 +48,7 @@ export interface ComponentItem {
   suffix?: string
   prefix?: string
   children?: ComponentItem[]
-  attrs:
+  attrs?:
     | InputAttrs
     | ButtonAttrs
     | InputNumberAttrs
@@ -58,4 +59,5 @@ export interface ComponentItem {
     | RadioAttrs
     | CheckboxAttrs
     | SelectAttrs
+    | CascaderAttrs
 }

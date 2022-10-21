@@ -75,6 +75,9 @@
                 color-format="hsv"
               ></el-color-picker>
             </template>
+            <template v-else-if="item.type === 'cascader'">
+              <el-cascader :options="item.children" v-bind="{ ...item.attrs }"></el-cascader>
+            </template>
             <component
               v-else
               :is="`el-${item.type}`"

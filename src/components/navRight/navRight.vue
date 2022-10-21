@@ -12,6 +12,7 @@
         <radio-attrs v-if="current.type === 'radio-group'"></radio-attrs>
         <checkbox-attrs v-if="current.type === 'checkbox-group'"></checkbox-attrs>
         <select-attrs v-if="current.type === 'select'"></select-attrs>
+        <cascader-attrs v-if="current.type === 'cascader'"></cascader-attrs>
 
         <!-- <el-divider>正则校验</el-divider>
         <validate></validate> -->
@@ -310,6 +311,7 @@ import sliderAttrs from '../componentAttrs/sliderAttrs/index.vue'
 import radioAttrs from '../componentAttrs/radioAttrs/index.vue'
 import checkboxAttrs from '../componentAttrs/checkboxAttrs/index.vue'
 import selectAttrs from '../componentAttrs/selectAttrs/index.vue'
+import cascaderAttrs from '../componentAttrs/cascaderAttrs/index.vue'
 
 const store = useStore()
 
