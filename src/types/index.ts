@@ -11,6 +11,7 @@ import { SelectAttrs } from './selectAttrs'
 import { CascaderAttrs } from './cascaderAttrs'
 import { TimePickerAttrs } from './timePicker'
 import { DatePickerAttrs } from './datePicker'
+import { TimeSelectAttrs } from './timeSelectAttrs'
 import { RuleItem } from './rules'
 
 export type SizeProps = '' | 'large' | 'small' | 'default'
@@ -64,4 +65,5 @@ export interface ComponentItem {
     | CascaderAttrs
     | TimePickerAttrs
     | DatePickerAttrs
+    | TimeSelectAttrs
 }
