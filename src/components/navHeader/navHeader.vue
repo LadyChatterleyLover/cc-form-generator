@@ -28,6 +28,7 @@
         <el-button type="primary" @click="comfirm">确认</el-button>
       </template>
     </el-dialog>
+    <form-drawer v-model:visible="drawerVisible"></form-drawer>
   </div>
 </template>
 
@@ -40,6 +41,7 @@ import { CopyDocument, DeleteFilled, Download, VideoPlay } from "@element-plus/i
 import { ComponentItem } from "@/types"
 import { vueTemplate } from "@/utils/template"
 import { useClipboard } from "@vueuse/core"
+import FormDrawer from '../formDrawer/FormDrawer.vue'
 
 interface ListItem {
   icon: Component
@@ -64,10 +66,11 @@ const rules = ref({
   ],
 })
 const visible = ref(false)
+const drawerVisible = ref(false)
 const list: ListItem[] = [
   {
     icon: VideoPlay,
-    name: "预览",
+    name: "运行",
   },
   {
     icon: Download,
@@ -82,6 +85,7 @@ const list: ListItem[] = [
     name: "清空",
   },
 ]
+
 
 const clickItem = (item: ListItem) => {
   if (!componentList.value || !componentList.value.length) {
@@ -120,9 +124,11 @@ const clickItem = (item: ListItem) => {
         ElMessage.info("取消操作")
       })
   }
-  if (item.name === "预览") {
+  if (item.name === "运行") {
     if (!componentList.value) ElMessage.warning("请先生成组件")
-    else window.open("/preview", "_blank")
+    else {
+      drawerVisible.value = true
+    }
   }
 }
 

@@ -12,6 +12,7 @@ specifiers:
   element-plus: ^2.2.17
   file-saver: ^2.0.5
   lodash: ^4.17.21
+  monaco-editor: ^0.34.1
   nprogress: ^0.2.0
   sass: ^1.50.1
   sass-loader: ^12.6.0
@@ -29,6 +30,7 @@ dependencies:
   element-plus: 2.2.17_vue@3.2.33
   file-saver: 2.0.5
   lodash: 4.17.21
+  monaco-editor: 0.34.1
   nprogress: 0.2.0
   vue: 3.2.33
   vue-router: 4.0.14_vue@3.2.33
@@ -1315,6 +1317,10 @@ packages:
 
   /memoize-one/6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
+    dev: false
+
+  /monaco-editor/0.34.1:
+    resolution: {integrity: sha512-FKc80TyiMaruhJKKPz5SpJPIjL+dflGvz4CpuThaPMc94AyN7SeC9HQ8hrvaxX7EyHdJcUY5i4D0gNyJj1vSZQ==}
     dev: false
 
   /ms/2.1.2:
