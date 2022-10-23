@@ -1,5 +1,5 @@
 <template>
-  <div ref="codeEditBox" class="codeEditBox" :style="{width: width + 'px'}"></div>
+  <div ref="codeEditBox" class="codeEditBox"></div>
 </template>
 
 <script lang="ts">
@@ -8,14 +8,6 @@ import * as monaco from "monaco-editor"
 export default defineComponent({
   name: "MonacoEditor",
   props: {
-    width: {
-      type: [String, Number],
-      default: 1200,
-    },
-    height: {
-      type: [String, Number],
-      default: 400,
-    },
     modelValue: String,
     language: String,
     theme: String,
@@ -75,6 +67,7 @@ export default defineComponent({
 ​
 <style lang="scss" scoped>
 .codeEditBox {
+  width: 100%;
   height: 100%;
 }
 </style>

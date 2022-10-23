@@ -1,30 +1,50 @@
 <template>
-  <el-drawer size="100%" v-model="drawerVisible" @opened="onOpen" @close="onClose">
-    <el-tabs v-model="activeTab" type="card" @tab-change="changeTab">
-      <el-tab-pane name="html">
-        <template #label>
-          <Edit v-if="activeTab === 'html'" />
-          <DocumentCopy v-else />
-          template
-        </template>
-      </el-tab-pane>
-      <el-tab-pane name="js">
-        <template #label>
-          <Edit v-if="activeTab === 'js'" />
-          <DocumentCopy v-else />
-          script
-        </template>
-      </el-tab-pane>
-      <el-tab-pane name="css">
-        <template #label>
-          <Edit v-if="activeTab === 'css'" />
-          <DocumentCopy v-else />
-          css
-        </template>
-      </el-tab-pane>
-    </el-tabs>
-    <div style="height: 100%" v-if="code">
-      <MonacoEditor v-model="code" :language="language" theme="vs-dark"></MonacoEditor>
+  <el-drawer size="100%" v-model="drawerVisible" :with-header="false" @opened="onOpen" @close="onClose">
+    <div class="container">
+      <div class="item">
+        <el-tabs v-model="activeTab" type="card" @tab-change="changeTab">
+          <el-tab-pane name="html">
+            <template #label>
+              <Edit v-if="activeTab === 'html'" />
+              <DocumentCopy v-else />
+              template
+            </template>
+          </el-tab-pane>
+          <el-tab-pane name="js">
+            <template #label>
+              <Edit v-if="activeTab === 'js'" />
+              <DocumentCopy v-else />
+              script
+            </template>
+          </el-tab-pane>
+          <el-tab-pane name="css">
+            <template #label>
+              <Edit v-if="activeTab === 'css'" />
+              <DocumentCopy v-else />
+              css
+            </template>
+          </el-tab-pane>
+        </el-tabs>
+        <div class="editor" v-if="code">
+          <MonacoEditor v-model="code" :language="language" theme="vs-dark" @change="changeEditor"></MonacoEditor>
+        </div>
+      </div>
+      <div class="item">
+        <div class="action">
+          <div class="action-item">
+            <div><Download /></div>
+            <div>下载vue文件</div>
+          </div>
+          <div class="action-item">
+            <div><DocumentCopy /></div>
+            <div>复制代码</div>
+          </div>
+          <div class="action-item" style="color: #f56c6c" @click="onClose">
+            <div><Close /></div>
+            <div>关闭</div>
+          </div>
+        </div>
+      </div>
     </div>
   </el-drawer>
 </template>
@@ -33,7 +53,7 @@
 import { ref, watch, computed } from "vue"
 import { useStore } from "vuex"
 import MonacoEditor from "../monacoEditor/MonacoEditor.vue"
-import { Refresh, DocumentCopy, Download, Close, Edit } from "@element-plus/icons-vue"
+import { DocumentCopy, Download, Close, Edit } from "@element-plus/icons-vue"
 import { saveAs } from "file-saver"
 import { beautifierConf } from "@/utils/index"
 import { getCode } from "@/utils/template"
@@ -64,13 +84,13 @@ const code = ref("")
 const language = ref("")
 
 const changeTab = (name: string) => {
-  code.value = ''
+  code.value = ""
   code.value = name === "html" ? htmlCode.value : name === "js" ? jsCode.value : cssCode.value
   language.value = mode[name]
 }
 
 const onOpen = () => {
-  code.value = ''
+  code.value = ""
   htmlCode.value = getCode(componentList.value).template
   jsCode.value = getCode(componentList.value).script
   cssCode.value = getCode(componentList.value).style
@@ -84,7 +104,11 @@ const onOpen = () => {
 }
 
 const onClose = () => {
-  emits("update:visible", !drawerVisible.value)
+  emits("update:visible", false)
+}
+
+const changeEditor = (val: string) => {
+  console.log(val)
 }
 
 watch(
@@ -95,4 +119,39 @@ watch(
 )
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  .item {
+    flex: 1;
+    &:first-child {
+      background: #1e1e1e;
+      color: #fff;
+    }
+  }
+  .editor {
+    height: 100%;
+  }
+  .action {
+    height: 33px;
+    background: #f2fafb;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    &-item {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      color: #8285f5;
+      cursor: pointer;
+      svg {
+        position: relative;
+        top: 2px;
+        margin-right: 4px;
+      }
+    }
+  }
+}
+</style>

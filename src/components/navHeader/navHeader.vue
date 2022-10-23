@@ -28,7 +28,9 @@
         <el-button type="primary" @click="comfirm">确认</el-button>
       </template>
     </el-dialog>
-    <form-drawer v-model:visible="drawerVisible"></form-drawer>
+    <div class="form-drawer-editor">
+      <form-drawer  v-model:visible="drawerVisible"></form-drawer>
+    </div>
   </div>
 </template>
 
@@ -41,7 +43,7 @@ import { CopyDocument, DeleteFilled, Download, VideoPlay } from "@element-plus/i
 import { ComponentItem } from "@/types"
 import { vueTemplate } from "@/utils/template"
 import { useClipboard } from "@vueuse/core"
-import FormDrawer from '../formDrawer/FormDrawer.vue'
+import FormDrawer from "../formDrawer/FormDrawer.vue"
 
 interface ListItem {
   icon: Component
@@ -66,7 +68,7 @@ const rules = ref({
   ],
 })
 const visible = ref(false)
-const drawerVisible = ref(false)
+const drawerVisible = ref(true)
 const list: ListItem[] = [
   {
     icon: VideoPlay,
@@ -86,7 +88,6 @@ const list: ListItem[] = [
   },
 ]
 
-
 const clickItem = (item: ListItem) => {
   if (!componentList.value || !componentList.value.length) {
     ElMessage.warning("请先生成组件")
@@ -98,13 +99,13 @@ const clickItem = (item: ListItem) => {
   if (item.name === "复制代码") {
     const str = vueTemplate(componentList.value)
     try {
-      const {copy} = useClipboard({
+      const { copy } = useClipboard({
         source: str,
       })
       copy()
-      ElMessage.success('复制成功')
+      ElMessage.success("复制成功")
     } catch (err) {
-      ElMessage.error('复制失败')
+      ElMessage.error("复制失败")
     }
   }
   if (item.name === "清空") {

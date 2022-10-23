@@ -1,0 +1,15 @@
+.form-drawer-editor {
+  .el-drawer__body {
+    padding: 0;
+  }
+  .el-tabs__item {
+    color: #fff;
+    border-left: none;
+    border-bottom: none;
+  }
+   .el-tabs__nav,
+    .el-tabs--card>.el-tabs__header .el-tabs__nav,
+    .el-tabs--card>.el-tabs__header {
+    border: none;
+   }
+}
