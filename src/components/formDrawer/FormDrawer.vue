@@ -44,6 +44,15 @@
             <div>关闭</div>
           </div>
         </div>
+        <iframe
+          v-show="isIframeLoaded"
+          ref="previewPage"
+          class="result-wrapper"
+          frameborder="0"
+          src="preview.html"
+          @load="iframeLoad"
+        />
+        <div v-show="!isIframeLoaded" v-loading="true" class="result-wrapper" />
       </div>
     </div>
   </el-drawer>
@@ -70,6 +79,7 @@ const emits = defineEmits(["update:visible"])
 
 const drawerVisible = ref(props.visible)
 
+const isIframeLoaded = ref(false)
 const htmlCode = ref("")
 const jsCode = ref("")
 const cssCode = ref("")
@@ -82,6 +92,7 @@ const mode = {
 
 const code = ref("")
 const language = ref("")
+const previewPage = ref<any>()
 
 const changeTab = (name: string) => {
   code.value = ""
@@ -109,6 +120,23 @@ const onClose = () => {
 
 const changeEditor = (val: string) => {
   console.log(val)
+}
+
+const runCode = () => {
+  const postData = {
+    type: "refreshFrame",
+    data: {
+      html: htmlCode.value,
+      js: jsCode.value.replace('export default', ''),
+      css: cssCode.value,
+    },
+  }
+  previewPage.value.contentWindow.postMessage(postData, location.origin)
+}
+
+const iframeLoad = () => {
+  isIframeLoaded.value = true
+  runCode()
 }
 
 watch(
@@ -152,6 +180,13 @@ watch(
         margin-right: 4px;
       }
     }
+  }
+  .result-wrapper {
+    height: calc(100vh - 33px);
+    width: 100%;
+    overflow: auto;
+    padding: 12px;
+    box-sizing: border-box;
   }
 }
 </style>

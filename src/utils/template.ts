@@ -83,8 +83,7 @@ export const getCode = (componentList: ComponentItem[]) => {
   if (componentList && componentList.length) {
     let isValue = componentList.find((item) => item.field || (item.attrs as any).seriesData)
     if (isValue)
-      script = `import {ref} from 'vue'
-  `
+      script = ``
     componentList.map((item, index) => {
       cloneAttrs = cloneDeep(item.attrs)
       for (let i in item.attrs) {
@@ -115,11 +114,13 @@ export const getCode = (componentList: ComponentItem[]) => {
         })
       }
       template += `
-    <el-${item.type} 
-     ${item.field ? "v-model=" + `"${item.field}"` : ""}
-     ${attrs}>
-     ${childStr}
-    </el-${item.type}>
+    <el-form-item>
+      <el-${item.type} 
+      ${item.field ? "v-model=" + `"${item.field}"` : ""}
+      ${attrs}>
+      ${childStr}
+      </el-${item.type}>
+    </el-form-item>
     `
       script += `${objStr}${
         item.field
@@ -133,10 +134,21 @@ export const getCode = (componentList: ComponentItem[]) => {
       childStr = ""
     })
     return {
-      template: `<template>
-        ${template}
-      </template>`,
-      script: script,
+      template: `
+        <el-form>${template}</el-form>
+      `,
+      script: `
+        defineComponent({
+          setup() {
+            ${script}
+            return {
+              inputValue727,
+              star227,
+              color975
+            }
+          }
+        })
+      `,
       style: "",
     }
   }

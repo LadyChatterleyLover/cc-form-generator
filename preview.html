@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="//unpkg.com/element-plus/dist/index.css" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="//unpkg.com/element-plus"></script>
+  <script src="https://unpkg.com/vue-router@4.0.15/dist/vue-router.global.js"></script>
+  <style>
+   
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <strong>抱歉，javascript被禁用，请开启后重试。</strong>
+  </noscript>
+  <div id="previewApp"></div>
+
+
+  <script>
+    const {
+      createApp,
+      ref,
+      defineComponent
+    } = Vue
+
+    const $previewApp = document.getElementById("previewApp")
+    window.addEventListener("message", initIframe, false)
+
+    function initIframe(event) {
+      if (event.data.type === "refreshFrame") {
+        $previewApp.innerHTML = `<div id="app"></div>`
+        const code = event.data.data
+        newVue(code.js, code.html)
+      }
+    }
+
+    function newVue(main, html) {
+      main = eval(`(${main})`)
+      main.template = `<div>${html}</div>`
+      const app = createApp({
+        components: {
+          child: main,
+        },
+        template: `<div><child /></div>`,
+      })
+      for (let i in ElementPlus) {
+        if (i.startsWith('El')) {
+            app.component(i, ElementPlus[i])
+          }
+      }
+      app.mount("#app")
+    }
+  </script>
+</body>
+
+
+</html>
