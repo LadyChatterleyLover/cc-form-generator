@@ -171,7 +171,7 @@ export const getCode = (componentList: ComponentItem[]) => {
         options = 'options'
       }
       template += `
-    <el-form-item label="${item.label}">
+    <el-form-item label="${item.label}" labelWidth="${item.labelWidth}px">
       <el-${item.type}
       ${item.field ? 'v-model=' + `"model.${item.field}"` : ''}
       ${item.type === 'cascader' ? ':props="props"' : ''}
@@ -202,8 +202,8 @@ export const getCode = (componentList: ComponentItem[]) => {
           ${script}
           return {
             model,
-            ${props},
-            ${options}
+            ${props ? props + ',' : ''}
+            ${options ? options + ',' : ''}
           }
         }
       })
