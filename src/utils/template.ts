@@ -1,5 +1,7 @@
 import { ComponentItem } from '@/types'
 import cloneDeep from 'lodash/cloneDeep'
+import { beautifierConf } from '.'
+import beautify from 'js-beautify'
 
 export const vueTemplate = (componentList: ComponentItem[]) => {
   let template = ``
@@ -88,6 +90,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
       childStr = ''
     })
   }
+  template = beautify.html(template, beautifierConf.html)
   return `<template>
             <el-form :model="model">
             ${template}
@@ -192,6 +195,7 @@ export const getCode = (componentList: ComponentItem[]) => {
       childStr = ''
     })
   }
+  template = beautify.html(template, beautifierConf.html)
   return {
     template: `
       <el-form :model="model">${template}</el-form>
