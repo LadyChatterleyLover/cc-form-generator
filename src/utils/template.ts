@@ -174,15 +174,13 @@ export const getCode = (componentList: ComponentItem[]) => {
         options = 'options'
       }
       template += `
-    <el-form-item label="${item.label}" labelWidth="${item.labelWidth}px">
+    <el-form-item label="${item.label}" labelWidth="${item.labelWidth}px" prop="${item.field}">
       <el-${item.type}
       ${item.field ? 'v-model=' + `"model.${item.field}"` : ''}
       ${item.type === 'cascader' ? ':props="props"' : ''}
       ${attrs}
       ${item.type === 'cascader' ? ':options="options"' : ''}
-      >
-      ${childStr}
-      ${item.type === 'button' ? (item.attrs as any).buttonText : ''}
+      >${childStr}${item.type === 'button' ? (item.attrs as any).buttonText : ''}
       </el-${item.type}>
     </el-form-item>
     `
