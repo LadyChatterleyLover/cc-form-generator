@@ -335,7 +335,7 @@ import timePickerAttrs from "../componentAttrs/timePickerAttrs/index.vue"
 import datePickerAttrs from "../componentAttrs/datePickerAttrs/index.vue"
 import timeSelectAttrs from "../componentAttrs/timeSelectAttrs/index.vue"
 
-const activeName = ref('form')
+const activeName = ref('component')
 
 const store = useStore()
 

@@ -4,6 +4,7 @@ import { beautifierConf } from '.'
 import beautify from 'js-beautify'
 
 export const vueTemplate = (componentList: ComponentItem[]) => {
+  const formAttrs = JSON.parse(localStorage.getItem('formAttrs'))
   let template = ``
   let attrs = ``
   let script = ``
@@ -22,7 +23,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
       }
       for (let i in item.attrs) {
         for (let j in item.defaultProps) {
-          if (item.attrs[i] === item.defaultProps[j]) {
+          if (i === j && item.attrs[i] === item.defaultProps[j]) {
             delete cloneAttrs[i]
           }
         }
@@ -78,7 +79,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
     `
       script = `
       import { ref } from 'vue'
-      let model = ref(${JSON.stringify(formData)})
+      let ${formAttrs.model} = ref(${JSON.stringify(formData)})
       ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
       ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
       `
@@ -90,7 +91,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
   script = beautify.html(script, beautifierConf.js)
   return `
 <template>
-  <el-form :model="model">
+  <el-form :model="${formAttrs.model}">
     ${template}
   </el-form>
 </template>
