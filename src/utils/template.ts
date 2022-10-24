@@ -57,31 +57,27 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
             }
           }
           childStr += `
-          <el-${child.type} ${childAttrs}>
-            ${
-              item.type === 'cascader'
-                ? ''
-                : child.type !== 'option'
-                ? (child.attrs as any).text
-                : (child.attrs as any).label
-            }
-          </el-${child.type}>`
+<el-${child.type} ${childAttrs}>${
+            item.type === 'cascader'
+              ? ''
+              : child.type !== 'option'
+              ? (child.attrs as any).text
+              : (child.attrs as any).label
+          }</el-${child.type}>`
           childAttrs = ''
         })
       }
       template += `
-      <el-form-item label="${item.label}">
-        <el-${item.type}
+    <el-form-item label="${item.label}" labelWidth="${item.labelWidth}px">
+      <el-${item.type}
         ${item.field ? 'v-model=' + `"model.${item.field}"` : ''}
         ${item.type === 'cascader' ? ':props="props"' : ''}
         ${item.type === 'cascader' ? ':options="options"' : ''}
-        ${attrs}>
-        ${childStr}
-        ${item.type === 'button' ? (item.attrs as any).buttonText : ''}
-      </el-${item.type}>
-      </el-form-item>
+        ${attrs}>${childStr}${item.type === 'button' ? (item.attrs as any).buttonText : ''}</el-${item.type}>
+                     </el-form-item>
     `
       script = `
+      import { ref } from 'vue'
       let model = ref(${JSON.stringify(formData)})
       ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
       ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
@@ -91,16 +87,20 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
     })
   }
   template = beautify.html(template, beautifierConf.html)
-  return `<template>
-            <el-form :model="model">
-            ${template}
-            </el-form>
-        </template>
-        <script lang="ts" setup>
-          ${script}
-        </script>
-        <style scoped lang="scss"></style>
-        `
+  script = beautify.html(script, beautifierConf.js)
+  return `
+<template>
+  <el-form :model="model">
+    ${template}
+  </el-form>
+</template>
+
+<script lang="ts" setup>
+  ${script}
+</script>
+
+<style scoped lang="scss"></style>
+`
 }
 
 export const getCode = (componentList: ComponentItem[]) => {
