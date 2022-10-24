@@ -17,3 +17,14 @@
     border: none;
   }
 }
+.nav-right-tabs {
+  .el-tabs__nav {
+    width: 100%;
+    display: flex;
+  }
+  .el-tabs__item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+}
