@@ -121,7 +121,7 @@
               <template #prepend v-if="item.type === 'input' && item.prefix">{{ item.prefix }}</template>
               <template #append v-if="item.type === 'input' && item.suffix">{{ item.suffix }}</template>
             </component>
-            <div class="btn">
+            <div class="btn" v-if="activeIndex === index">
               <el-tooltip content="复制">
                 <el-button @click.stop="copy(item)" size="small" circle :icon="Edit" plain type="primary"></el-button>
               </el-tooltip>

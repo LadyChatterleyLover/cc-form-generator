@@ -25,6 +25,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/js-beautify": "^1.13.3",
     "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.25",
     "@types/nprogress": "^0.2.0",
