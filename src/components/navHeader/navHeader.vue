@@ -139,6 +139,7 @@ const comfirm = () => {
       const str = vueTemplate(componentList.value)
       const blob = new Blob([str!], { type: 'text/plain;charset=utf-8' })
       saveAs(blob, `${model.value.filename}.vue`)
+      form.value?.resetFields()
       visible.value = false
     } else {
       ElMessage.error('表单填写有误,请检查')
