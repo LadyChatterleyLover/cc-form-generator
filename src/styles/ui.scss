@@ -7,9 +7,13 @@
     border-left: none;
     border-bottom: none;
   }
-   .el-tabs__nav,
-    .el-tabs--card>.el-tabs__header .el-tabs__nav,
-    .el-tabs--card>.el-tabs__header {
+  .el-tabs__nav,
+  .el-tabs--card > .el-tabs__header .el-tabs__nav,
+  .el-tabs--card > .el-tabs__header {
     border: none;
-   }
+  }
+  .el-tabs--card > .el-tabs__header .el-tabs__item:first-child,
+  .el-tabs--card > .el-tabs__header .el-tabs__item {
+    border: none;
+  }
 }

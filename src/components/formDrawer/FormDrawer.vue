@@ -31,11 +31,15 @@
       </div>
       <div class="item">
         <div class="action">
-          <div class="action-item">
+          <div class="action-item" @click="runCode">
+            <div><Refresh /></div>
+            <div>刷新</div>
+          </div>
+          <div class="action-item" @click="download">
             <div><Download /></div>
             <div>下载vue文件</div>
           </div>
-          <div class="action-item">
+          <div class="action-item" @click="copyCode">
             <div><DocumentCopy /></div>
             <div>复制代码</div>
           </div>
@@ -56,17 +60,32 @@
       </div>
     </div>
   </el-drawer>
+
+  <el-dialog v-model="visible" title="导出文件">
+    <el-form ref="form" :model="model" :rules="rules">
+      <el-form-item label="组件名称" prop="filename">
+        <el-input placeholder="请输入组件名称" v-model="model.filename" clearable></el-input>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <el-button @click="cancel">取消</el-button>
+      <el-button type="primary" @click="comfirm">确认</el-button>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, computed } from "vue"
-import { useStore } from "vuex"
-import MonacoEditor from "../monacoEditor/MonacoEditor.vue"
-import { DocumentCopy, Download, Close, Edit } from "@element-plus/icons-vue"
-import { saveAs } from "file-saver"
-import { beautifierConf } from "@/utils/index"
-import { getCode } from "@/utils/template"
-import loadBeautifier from "@/utils/loadBeautifier"
+import { ref, watch, computed } from 'vue'
+import { useStore } from 'vuex'
+import MonacoEditor from '../monacoEditor/MonacoEditor.vue'
+import { DocumentCopy, Download, Close, Edit, Refresh } from '@element-plus/icons-vue'
+import { saveAs } from 'file-saver'
+import { beautifierConf } from '@/utils/index'
+import { getCode } from '@/utils/template'
+import loadBeautifier from '@/utils/loadBeautifier'
+import { vueTemplate } from '@/utils/template'
+import { ElMessage } from 'element-plus'
+import { useClipboard } from '@vueuse/core'
 
 const store = useStore()
 const componentList = computed(() => store.state.componentList)
@@ -75,33 +94,48 @@ const props = defineProps<{
   visible: boolean
 }>()
 
-const emits = defineEmits(["update:visible"])
+const emits = defineEmits(['update:visible'])
 
 const drawerVisible = ref(props.visible)
 
+const form = ref()
+const visible = ref(false)
+const model = ref({
+  filename: '',
+})
+const rules = ref({
+  filename: [
+    {
+      required: true,
+      message: '文件名称不能为空',
+      trigger: 'blur',
+    },
+  ],
+})
+
 const isIframeLoaded = ref(false)
-const htmlCode = ref("")
-const jsCode = ref("")
-const cssCode = ref("")
-const activeTab = ref("html")
+const htmlCode = ref('')
+const jsCode = ref('')
+const cssCode = ref('')
+const activeTab = ref('html')
 const mode = {
-  html: "html",
-  js: "typescript",
-  css: "css",
+  html: 'html',
+  js: 'typescript',
+  css: 'css',
 }
 
-const code = ref("")
-const language = ref("")
+const code = ref('')
+const language = ref('')
 const previewPage = ref<any>()
 
 const changeTab = (name: string) => {
-  code.value = ""
-  code.value = name === "html" ? htmlCode.value : name === "js" ? jsCode.value : cssCode.value
+  code.value = ''
+  code.value = name === 'html' ? htmlCode.value : name === 'js' ? jsCode.value : cssCode.value
   language.value = mode[name]
 }
 
 const onOpen = () => {
-  code.value = ""
+  code.value = ''
   htmlCode.value = getCode(componentList.value).template
   jsCode.value = getCode(componentList.value).script
   cssCode.value = getCode(componentList.value).style
@@ -109,25 +143,33 @@ const onOpen = () => {
     htmlCode.value = btf.html(htmlCode.value, beautifierConf.html)
     jsCode.value = btf.js(jsCode.value, beautifierConf.js)
     cssCode.value = btf.js(cssCode.value, beautifierConf.css)
-    code.value = activeTab.value === "html" ? htmlCode.value : activeTab.value === "js" ? jsCode.value : cssCode.value
+    code.value = activeTab.value === 'html' ? htmlCode.value : activeTab.value === 'js' ? jsCode.value : cssCode.value
     language.value = mode[activeTab.value]
   })
 }
 
 const onClose = () => {
-  emits("update:visible", false)
+  emits('update:visible', false)
 }
 
 const changeEditor = (val: string) => {
-  console.log(val)
+  if (activeTab.value === 'html') {
+    htmlCode.value = val
+  }
+  if (activeTab.value === 'js') {
+    jsCode.value = val
+  }
+  if (activeTab.value === 'css') {
+    cssCode.value = val
+  }
 }
 
 const runCode = () => {
   const postData = {
-    type: "refreshFrame",
+    type: 'refreshFrame',
     data: {
       html: htmlCode.value,
-      js: jsCode.value.replace('export default', ''),
+      js: jsCode.value,
       css: cssCode.value,
     },
   }
@@ -137,6 +179,41 @@ const runCode = () => {
 const iframeLoad = () => {
   isIframeLoaded.value = true
   runCode()
+}
+
+const comfirm = () => {
+  form.value?.validate((valid) => {
+    if (valid) {
+      const str = vueTemplate(componentList.value)
+      const blob = new Blob([str!], { type: 'text/plain;charset=utf-8' })
+      saveAs(blob, `${model.value.filename}.vue`)
+      visible.value = false
+    } else {
+      ElMessage.error('表单填写有误,请检查')
+    }
+  })
+}
+
+const cancel = () => {
+  form.value?.resetFields()
+  visible.value = false
+}
+
+const download = () => {
+  visible.value = true
+}
+
+const copyCode = () => {
+  const str = vueTemplate(componentList.value)
+  try {
+    const { copy } = useClipboard({
+      source: str,
+    })
+    copy()
+    ElMessage.success('复制成功')
+  } catch (err) {
+    ElMessage.error('复制失败')
+  }
 }
 
 watch(
