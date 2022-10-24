@@ -7,12 +7,25 @@ export const components: ComponentItem[] = [
     icon: 'document',
     value: '',
     field: 'inputValue',
-
     labelWidth: 90,
     showLabel: true,
     suffix: '',
     prefix: '',
     rules: [],
+    defaultProps: {
+      type: 'text',
+      maxlength: '',
+      showWordLimit: false,
+      showPassword: false,
+      disabled: false,
+      readonly: false,
+      size: '',
+      prefixIcon: '',
+      suffixIcon: '',
+      rows: 2,
+      autosize: false,
+      resize: 'none',
+    },
     attrs: {
       type: 'text',
       maxlength: '',
@@ -36,6 +49,18 @@ export const components: ComponentItem[] = [
     icon: 'Notification',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      text: false,
+      plain: false,
+      round: false,
+      circle: false,
+      loading: false,
+      disabled: false,
+      autofocus: false,
+      autoInsertSpace: false,
+      icon: '',
+      nativeType: 'button',
+    },
     attrs: {
       text: false,
       buttonText: '按钮',
@@ -60,6 +85,15 @@ export const components: ComponentItem[] = [
     field: 'inputNumber',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      step: 1,
+      stepStrictly: false,
+      precision: 0,
+      size: 'large',
+      disabled: false,
+      controls: true,
+      controlsPosition: '',
+    },
     attrs: {
       min: 0,
       max: 100,
@@ -77,10 +111,24 @@ export const components: ComponentItem[] = [
     type: 'switch',
     label: '开关',
     icon: 'Switch',
-    value: false,
+    value: '',
     field: 'switch',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      disabled: false,
+      loading: false,
+      width: 40,
+      activeIcon: '',
+      inactiveIcon: '',
+      activeText: '',
+      inactiveText: '',
+      activeValue: true,
+      inactiveValue: false,
+      activeColor: '#409EFF',
+      inactiveColor: '#C0CCDA',
+      borderColor: '',
+    },
     attrs: {
       disabled: false,
       loading: false,
@@ -104,6 +152,17 @@ export const components: ComponentItem[] = [
     labelWidth: 90,
     value: 3,
     field: 'star',
+    defaultProps: {
+      max: 5,
+      disabled: false,
+      allowHalf: false,
+      voidColor: '#C6D1DE',
+      disabledVoidColor: '#EFF2F7',
+      disabledVoidIcon: 'StarFilled',
+      showText: true,
+      showScore: true,
+      textColor: '',
+    },
     attrs: {
       max: 5,
       disabled: false,
@@ -124,6 +183,12 @@ export const components: ComponentItem[] = [
     field: 'color',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      disabled: false,
+      showAlpha: false,
+      size: '',
+      colorFormat: 'rgb',
+    },
     attrs: {
       disabled: false,
       showAlpha: false,
@@ -139,6 +204,17 @@ export const components: ComponentItem[] = [
     field: 'slider',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      step: 1,
+      disabled: false,
+      showInput: false,
+      showInputControls: true,
+      inputSize: 'small',
+      showStops: false,
+      showTooltip: true,
+      range: false,
+      vertical: false,
+    },
     attrs: {
       min: 0,
       max: 100,
@@ -163,6 +239,12 @@ export const components: ComponentItem[] = [
     field: 'radio',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      textColor: '#ffffff',
+      fill: '#409EFF',
+      disabled: false,
+      size: 'default',
+    },
     attrs: {
       textColor: '#ffffff',
       fill: '#409EFF',
@@ -172,6 +254,10 @@ export const components: ComponentItem[] = [
     children: [
       {
         type: 'radio',
+        defaultProps: {
+          disabled: false,
+          border: false,
+        },
         attrs: {
           label: '1',
           text: '选项1',
@@ -182,6 +268,9 @@ export const components: ComponentItem[] = [
       },
       {
         type: 'radio',
+        defaultProps: {
+          text: '选项1',
+        },
         attrs: {
           text: '选项2',
           label: '2',
@@ -200,6 +289,12 @@ export const components: ComponentItem[] = [
     field: 'checkbox',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      textColor: '#ffffff',
+      fill: '#409EFF',
+      disabled: false,
+      size: 'default',
+    },
     attrs: {
       textColor: '#ffffff',
       fill: '#409EFF',
@@ -209,6 +304,11 @@ export const components: ComponentItem[] = [
     children: [
       {
         type: 'checkbox',
+        defaultProps: {
+          disabled: false,
+          border: false,
+          size: '',
+        },
         attrs: {
           label: '1',
           text: '选项1',
@@ -219,6 +319,11 @@ export const components: ComponentItem[] = [
       },
       {
         type: 'checkbox',
+        defaultProps: {
+          disabled: false,
+          border: false,
+          size: '',
+        },
         attrs: {
           text: '选项2',
           label: '2',
@@ -229,6 +334,11 @@ export const components: ComponentItem[] = [
       },
       {
         type: 'checkbox',
+        defaultProps: {
+          disabled: false,
+          border: false,
+          size: '',
+        },
         attrs: {
           text: '选项3',
           label: '3',
@@ -247,6 +357,19 @@ export const components: ComponentItem[] = [
     field: 'select',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      multiple: false,
+      disabled: false,
+      clearable: false,
+      collapseTags: false,
+      collapseTagsTooltip: false,
+      valueKey: '',
+      size: 'default',
+      multipleLimit: 0,
+      filterable: false,
+      remote: false,
+      loading: false,
+    },
     attrs: {
       multiple: false,
       disabled: false,
@@ -266,6 +389,9 @@ export const components: ComponentItem[] = [
     children: [
       {
         type: 'option',
+        defaultProps: {
+          disabled: false,
+        },
         attrs: {
           label: '选项1',
           value: '1',
@@ -274,6 +400,9 @@ export const components: ComponentItem[] = [
       },
       {
         type: 'option',
+        defaultProps: {
+          disabled: false,
+        },
         attrs: {
           label: '选项2',
           value: '2',
@@ -290,9 +419,27 @@ export const components: ComponentItem[] = [
     field: 'cascader',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      size: 'default',
+      placeholder: '请选择',
+      disabled: false,
+      clearable: false,
+      filterable: false,
+      showAllLevels: false,
+      separator: '/',
+      props: {
+        expandTrigger: 'click',
+        multiple: false,
+        value: 'value',
+        label: 'label',
+        children: 'children',
+        disabled: 'disabled',
+        leaf: 'leaf',
+      },
+    },
     attrs: {
       size: 'default',
-      placeholder: '',
+      placeholder: '请选择',
       disabled: false,
       clearable: false,
       filterable: false,
@@ -330,6 +477,19 @@ export const components: ComponentItem[] = [
     field: 'timePicker',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      format: 'HH:mm:ss',
+      readonly: false,
+      disabled: false,
+      editable: false,
+      clearable: false,
+      arrowControl: false,
+      size: 'default',
+      isRange: false,
+      rangeSeparator: '-',
+      startPlaceholder: '开始时间',
+      endPlaceholder: '结束时间',
+    },
     attrs: {
       format: 'HH:mm:ss',
       readonly: false,
@@ -353,6 +513,19 @@ export const components: ComponentItem[] = [
     field: 'timePicker',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      format: 'YYYY-MM-DD',
+      readonly: false,
+      disabled: false,
+      editable: false,
+      clearable: false,
+      size: 'default',
+      placeholder: '请选择',
+      startPlaceholder: '开始日期',
+      endPlaceholder: '结束日期',
+      rangeSeparator: '-',
+      type: 'date',
+    },
     attrs: {
       format: 'YYYY-MM-DD',
       readonly: false,
@@ -375,6 +548,13 @@ export const components: ComponentItem[] = [
     field: 'timeSelect',
     showLabel: true,
     labelWidth: 90,
+    defaultProps: {
+      readonly: false,
+      disabled: false,
+      editable: false,
+      clearable: false,
+      size: 'default',
+    },
     attrs: {
       readonly: false,
       disabled: false,

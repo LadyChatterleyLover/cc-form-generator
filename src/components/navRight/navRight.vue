@@ -13,6 +13,7 @@
         <checkbox-attrs v-if="current.type === 'checkbox-group'"></checkbox-attrs>
         <select-attrs v-if="current.type === 'select'"></select-attrs>
         <cascader-attrs v-if="current.type === 'cascader'"></cascader-attrs>
+        <date-picker-attrs v-if="current.type === 'date-picker'"></date-picker-attrs>
         <time-picker-attrs v-if="current.type === 'time-picker'"></time-picker-attrs>
         <time-select-attrs v-if="current.type === 'time-select'"></time-select-attrs>
 

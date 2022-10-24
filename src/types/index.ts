@@ -51,6 +51,9 @@ export interface ComponentItem {
   suffix?: string
   prefix?: string
   children?: ComponentItem[]
+  defaultProps?: {
+    [key: string]: any
+  }
   attrs?:
     | InputAttrs
     | ButtonAttrs

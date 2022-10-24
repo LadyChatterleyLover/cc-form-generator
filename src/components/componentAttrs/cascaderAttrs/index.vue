@@ -12,6 +12,9 @@
     <el-form-item label="标签宽度">
       <el-input-number v-model="current.labelWidth"></el-input-number>
     </el-form-item>
+    <el-form-item label="占位符">
+      <el-input clearable v-model="current.attrs.placeholder"></el-input>
+    </el-form-item>
     <el-form-item label="尺寸">
       <el-select v-model="current.attrs.size" placeholder="请选择复选框尺寸">
         <el-option value="default" label="默认"></el-option>

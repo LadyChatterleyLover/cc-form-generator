@@ -1,8 +1,5 @@
 import { ComponentItem } from '@/types'
 import cloneDeep from 'lodash/cloneDeep'
-import { parse } from '@babel/parser'
-import loadBeautifier from './loadBeautifier'
-import { beautifierConf } from './index'
 
 export const vueTemplate = (componentList: ComponentItem[]) => {
   let template = ``
@@ -22,8 +19,16 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
         formData[item.field] = item.value
       }
       for (let i in item.attrs) {
+        for (let j in item.defaultProps) {
+          if (item.attrs[i] === item.defaultProps[j]) {
+            delete cloneAttrs[i]
+          }
+        }
         if (i === 'buttonText') {
           delete cloneAttrs[i]
+        }
+        if (item.type === 'cascader') {
+          delete cloneAttrs['props']
         }
         attrs += `
       ${
@@ -36,17 +41,28 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
           : ''
       }`
       }
-      if (item.children && item.children.length) {
+      if (item.children && item.children.length && item.type !== 'cascader') {
         let childAttrs = ``
         item.children!.map((child) => {
           for (let i in child.attrs) {
             if ((child.attrs as any)[i]) {
-              childAttrs += `
+              for (let j in child.defaultProps) {
+                if (i !== j && child.attrs[i] !== child.defaultProps[j] && i !== 'text') {
+                  childAttrs = `
               ${i}="${(child.attrs as any)[i]}"`
+                }
+              }
             }
           }
           childStr += `
           <el-${child.type} ${childAttrs}>
+            ${
+              item.type === 'cascader'
+                ? ''
+                : child.type !== 'option'
+                ? (child.attrs as any).text
+                : (child.attrs as any).label
+            }
           </el-${child.type}>`
           childAttrs = ''
         })
@@ -55,13 +71,19 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
       <el-form-item label="${item.label}">
         <el-${item.type}
         ${item.field ? 'v-model=' + `"model.${item.field}"` : ''}
+        ${item.type === 'cascader' ? ':props="props"' : ''}
+        ${item.type === 'cascader' ? ':options="options"' : ''}
         ${attrs}>
         ${childStr}
         ${item.type === 'button' ? (item.attrs as any).buttonText : ''}
       </el-${item.type}>
       </el-form-item>
     `
-      script = `let model = ref(${JSON.stringify(formData)})`
+      script = `
+      let model = ref(${JSON.stringify(formData)})
+      ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
+      ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
+      `
       attrs = ''
       childStr = ''
     })
@@ -85,6 +107,8 @@ export const getCode = (componentList: ComponentItem[]) => {
   let childStr = ``
   let cloneAttrs: any = {}
   let formData = {}
+  let props = ''
+  let options = ''
   if (componentList && componentList.length) {
     let isValue = componentList.find((item) => item.field || (item.attrs as any).seriesData)
     if (isValue) script = ``
@@ -94,8 +118,16 @@ export const getCode = (componentList: ComponentItem[]) => {
         formData[item.field] = item.value
       }
       for (let i in item.attrs) {
-        if (i === 'buttonText') {
+        for (let j in item.defaultProps) {
+          if (i === j && item.attrs[i] === item.defaultProps[j]) {
+            delete cloneAttrs[i]
+          }
+        }
+        if (i === 'buttonText' || i === 'props') {
           delete cloneAttrs[i]
+        }
+        if (item.type === 'cascader') {
+          delete cloneAttrs['props']
         }
         attrs += `
       ${
@@ -108,26 +140,44 @@ export const getCode = (componentList: ComponentItem[]) => {
           : ''
       }`
       }
-      if (item.children && item.children.length) {
+      if (item.children && item.children.length && item.type !== 'cascader') {
         let childAttrs = ``
         item.children!.map((child) => {
           for (let i in child.attrs) {
             if ((child.attrs as any)[i]) {
-              childAttrs += `
+              for (let j in child.defaultProps) {
+                if (i !== j && child.attrs[i] !== child.defaultProps[j] && i !== 'text') {
+                  childAttrs = `
               ${i}="${(child.attrs as any)[i]}"`
+                }
+              }
             }
           }
           childStr += `
           <el-${child.type} ${childAttrs}>
+            ${
+              item.type === 'cascader'
+                ? ''
+                : child.type !== 'option'
+                ? (child.attrs as any).text
+                : (child.attrs as any).label
+            }
           </el-${child.type}>`
           childAttrs = ''
         })
+      }
+      if (item.type === 'cascader') {
+        props = 'props'
+        options = 'options'
       }
       template += `
     <el-form-item label="${item.label}">
       <el-${item.type}
       ${item.field ? 'v-model=' + `"model.${item.field}"` : ''}
-      ${attrs}>
+      ${item.type === 'cascader' ? ':props="props"' : ''}
+      ${attrs}
+      ${item.type === 'cascader' ? ':options="options"' : ''}
+      >
       ${childStr}
       ${item.type === 'button' ? (item.attrs as any).buttonText : ''}
       </el-${item.type}>
@@ -135,6 +185,8 @@ export const getCode = (componentList: ComponentItem[]) => {
     `
       script = `
       let model = ref(${JSON.stringify(formData)})
+      ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
+      ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
       `
       attrs = ''
       childStr = ''
@@ -149,7 +201,9 @@ export const getCode = (componentList: ComponentItem[]) => {
         setup() {
           ${script}
           return {
-            model
+            model,
+            ${props},
+            ${options}
           }
         }
       })

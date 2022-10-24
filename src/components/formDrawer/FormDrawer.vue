@@ -146,6 +146,7 @@ const onOpen = () => {
     code.value = activeTab.value === 'html' ? htmlCode.value : activeTab.value === 'js' ? jsCode.value : cssCode.value
     language.value = mode[activeTab.value]
   })
+  runCode()
 }
 
 const onClose = () => {
