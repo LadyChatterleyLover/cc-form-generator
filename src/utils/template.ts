@@ -2,6 +2,7 @@ import { ComponentItem } from '@/types'
 import cloneDeep from 'lodash/cloneDeep'
 import { beautifierConf } from '.'
 import beautify from 'js-beautify'
+import { RuleItem } from '@/types/rules'
 
 export const vueTemplate = (componentList: ComponentItem[]) => {
   const formAttrs = JSON.parse(localStorage.getItem('formAttrs'))
@@ -10,6 +11,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
   let script = ``
   let childStr = ``
   let formData = {}
+  let rules = {}
   let cloneAttrs: any = {}
   if (componentList && componentList.length) {
     let isValue = componentList.find((item) => item.field || (item.attrs as any).seriesData)
@@ -20,6 +22,15 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
       cloneAttrs = cloneDeep(item.attrs)
       if (item.field) {
         formData[item.field] = item.value
+        if (item.rules) {
+          let cloneRules = cloneDeep(item.rules)
+          cloneRules.map((item) => {
+            if (item.pattern) {
+              item.pattern = new RegExp((item.pattern as string).slice(1, -1))
+            }
+          })
+          rules[item.field] = cloneRules
+        }
       }
       for (let i in item.attrs) {
         for (let j in item.defaultProps) {
@@ -80,6 +91,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
       script = `
       import { ref } from 'vue'
       let ${formAttrs.model} = ref(${JSON.stringify(formData)})
+      let ${formAttrs.rules} = ref(${JSON.stringify(rules)})
       ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
       ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
       `
@@ -91,7 +103,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
   script = beautify.html(script, beautifierConf.js)
   return `
 <template>
-  <el-form :model="${formAttrs.model}">
+  <el-form :model="${formAttrs.model}" :rules="${formAttrs.rules}">
     ${template}
   </el-form>
 </template>
@@ -111,6 +123,8 @@ export const getCode = (componentList: ComponentItem[]) => {
   let childStr = ``
   let cloneAttrs: any = {}
   let formData = {}
+  let rules = {}
+  let cloneStringRules = {}
   let props = ''
   let options = ''
   if (componentList && componentList.length) {
@@ -120,6 +134,22 @@ export const getCode = (componentList: ComponentItem[]) => {
       cloneAttrs = cloneDeep(item.attrs)
       if (item.field) {
         formData[item.field] = item.value
+        if (item.rules) {
+          let cloneRules = cloneDeep(item.rules)
+          let cloneRules1 = cloneDeep(item.rules)
+          cloneRules.map((item) => {
+            if (item.pattern) {
+              item.pattern = new RegExp((item.pattern as string).slice(1, -1))
+            }
+          })
+          cloneRules1.map((item) => {
+            if (item.pattern) {
+              item.pattern = (item.pattern as string).slice(1, -1)
+            }
+          })
+          rules[item.field] = cloneRules
+          cloneStringRules[item.field] = item.rules
+        }
       }
       for (let i in item.attrs) {
         for (let j in item.defaultProps) {
@@ -187,6 +217,7 @@ export const getCode = (componentList: ComponentItem[]) => {
     `
       script = `
       let model = ref(${JSON.stringify(formData)})
+      let rules = ref(${JSON.stringify(cloneStringRules)})
       ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
       ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
       `
@@ -197,7 +228,7 @@ export const getCode = (componentList: ComponentItem[]) => {
   template = beautify.html(template, beautifierConf.html)
   return {
     template: `
-      <el-form :model="model">${template}</el-form>
+      <el-form :model="model" :rules="rules">${template}</el-form>
     `,
     script: `
       defineComponent({
@@ -205,6 +236,7 @@ export const getCode = (componentList: ComponentItem[]) => {
           ${script}
           return {
             model,
+            rules,
             ${props ? props + ',' : ''}
             ${options ? options + ',' : ''}
           }

@@ -50,7 +50,7 @@ const formAttrs = computed(() => store.state.formAttrs)
 watch(
   () => formAttrs.value,
   (val) => {
-    localStorage.setItem('setFormAttrs', JSON.stringify(val))
+    localStorage.setItem('formAttrs', JSON.stringify(val))
     store.commit('setFormAttrs', val)
   },
   { deep: true }

@@ -6,15 +6,18 @@
         :label-width="`${formAttrs?.labelWidth}px`"
         :size="formAttrs?.size"
         :disabled="formAttrs?.disabled"
+        :model="model"
+        :rules="rules"
+        :validate-on-rule-change="false"
       >
         <template v-for="(item, index) in componentList" :key="index">
           <el-form-item
-            @click="clickItem(item, index)"
             class="item"
+            :prop="item.field"
             :class="{ active: activeIndex === index, 'rate-form-item-align-center': item.type === 'rate' }"
             :label="item.showLabel ? item.label : ''"
             :label-width="`${item.showLabel ? `${item.labelWidth}px` : '0px'}`"
-            :rules="item.rules"
+            @click="clickItem(item, index)"
           >
             <template v-if="item.type === 'button'">
               <el-button
@@ -142,12 +145,14 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ComputedRef, watch, onMounted } from 'vue'
+import { ref, computed, ComputedRef, watch, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { toLine } from '@/utils'
 import { ComponentItem } from '@/types'
 import { Edit, Delete } from '@element-plus/icons-vue'
 import * as Icons from '@element-plus/icons-vue'
+import { RuleItem } from '@/types/rules'
+import cloneDeep from 'lodash/cloneDeep'
 
 const store = useStore()
 
@@ -155,6 +160,9 @@ const componentList: ComputedRef<any[]> = computed(() => store.state.componentLi
 const currentComponent = computed(() => store.state.currentComponent)
 const activeIndex = computed(() => store.state.activeIndex)
 const formAttrs = computed(() => store.state.formAttrs)
+
+const rules = ref<RuleItem>({})
+const model = ref<any>({})
 
 const dragover = (e: DragEvent) => {
   e.preventDefault()
@@ -244,6 +252,29 @@ watch(
     }
   },
   { deep: true }
+)
+
+watch(
+  () => componentList.value,
+  (val) => {
+    if (val && val.length) {
+      val.map((item) => {
+        rules.value = {}
+        let cloneRules: RuleItem[] = []
+        if (item.rules) {
+          cloneRules = cloneDeep(item.rules)
+          cloneRules.map((item) => {
+            if (item.pattern) {
+              item.pattern = new RegExp((item.pattern as string).slice(1, -1))
+            }
+          })
+        }
+        rules.value[item.field] = cloneRules
+        model.value[item.field] = item.value
+      })
+    }
+  },
+  { deep: true, immediate: true }
 )
 </script>
 

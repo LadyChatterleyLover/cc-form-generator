@@ -82,10 +82,10 @@ import { DocumentCopy, Download, Close, Edit, Refresh } from '@element-plus/icon
 import { saveAs } from 'file-saver'
 import { beautifierConf } from '@/utils/index'
 import { getCode } from '@/utils/template'
-import loadBeautifier from '@/utils/loadBeautifier'
 import { vueTemplate } from '@/utils/template'
 import { ElMessage } from 'element-plus'
 import { useClipboard } from '@vueuse/core'
+import beautify from 'js-beautify'
 
 const store = useStore()
 const componentList = computed(() => store.state.componentList)
@@ -139,13 +139,11 @@ const onOpen = () => {
   htmlCode.value = getCode(componentList.value).template
   jsCode.value = getCode(componentList.value).script
   cssCode.value = getCode(componentList.value).style
-  loadBeautifier((btf) => {
-    htmlCode.value = btf.html(htmlCode.value, beautifierConf.html)
-    jsCode.value = btf.js(jsCode.value, beautifierConf.js)
-    cssCode.value = btf.js(cssCode.value, beautifierConf.css)
-    code.value = activeTab.value === 'html' ? htmlCode.value : activeTab.value === 'js' ? jsCode.value : cssCode.value
-    language.value = mode[activeTab.value]
-  })
+  htmlCode.value = beautify.html(htmlCode.value, beautifierConf.html)
+  jsCode.value = beautify.js(jsCode.value, beautifierConf.js)
+  cssCode.value = beautify.js(cssCode.value, beautifierConf.css)
+  code.value = activeTab.value === 'html' ? htmlCode.value : activeTab.value === 'js' ? jsCode.value : cssCode.value
+  language.value = mode[activeTab.value]
   runCode()
 }
 
