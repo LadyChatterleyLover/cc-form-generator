@@ -315,25 +315,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ComputedRef, ref } from "vue"
-import { useStore } from "vuex"
-import { ComponentItem } from "@/types"
-import validate from "../validate/Validate.vue"
-import formAttrs from "../formAttrs/FormAttrs.vue"
-import inputAttrs from "../componentAttrs/inputAttrs/index.vue"
-import buttonAttrs from "../componentAttrs/buttonAttrs/index.vue"
-import inputNumberAttrs from "../componentAttrs/inputNumberAttrs/index.vue"
-import switchAttrs from "../componentAttrs/switchAttrs/index.vue"
-import rateAttrs from "../componentAttrs/rateAttrs/index.vue"
-import colorPickerAttrs from "../componentAttrs/colorPickerAttrs/index.vue"
-import sliderAttrs from "../componentAttrs/sliderAttrs/index.vue"
-import radioAttrs from "../componentAttrs/radioAttrs/index.vue"
-import checkboxAttrs from "../componentAttrs/checkboxAttrs/index.vue"
-import selectAttrs from "../componentAttrs/selectAttrs/index.vue"
-import cascaderAttrs from "../componentAttrs/cascaderAttrs/index.vue"
-import timePickerAttrs from "../componentAttrs/timePickerAttrs/index.vue"
-import datePickerAttrs from "../componentAttrs/datePickerAttrs/index.vue"
-import timeSelectAttrs from "../componentAttrs/timeSelectAttrs/index.vue"
+import { computed, ComputedRef, ref } from 'vue'
+import { useStore } from 'vuex'
+import { ComponentItem } from '@/types'
+import validate from '../validate/Validate.vue'
+import formAttrs from '../formAttrs/FormAttrs.vue'
+import inputAttrs from '../componentAttrs/inputAttrs/index.vue'
+import buttonAttrs from '../componentAttrs/buttonAttrs/index.vue'
+import inputNumberAttrs from '../componentAttrs/inputNumberAttrs/index.vue'
+import switchAttrs from '../componentAttrs/switchAttrs/index.vue'
+import rateAttrs from '../componentAttrs/rateAttrs/index.vue'
+import colorPickerAttrs from '../componentAttrs/colorPickerAttrs/index.vue'
+import sliderAttrs from '../componentAttrs/sliderAttrs/index.vue'
+import radioAttrs from '../componentAttrs/radioAttrs/index.vue'
+import checkboxAttrs from '../componentAttrs/checkboxAttrs/index.vue'
+import selectAttrs from '../componentAttrs/selectAttrs/index.vue'
+import cascaderAttrs from '../componentAttrs/cascaderAttrs/index.vue'
+import timePickerAttrs from '../componentAttrs/timePickerAttrs/index.vue'
+import datePickerAttrs from '../componentAttrs/datePickerAttrs/index.vue'
+import timeSelectAttrs from '../componentAttrs/timeSelectAttrs/index.vue'
 
 const activeName = ref('component')
 
@@ -349,7 +349,6 @@ const current: ComputedRef<ComponentItem> = computed(() => store.state.currentCo
   overflow: hidden;
   .container {
     height: 100%;
-    overflow: scroll;
   }
 }
 .el-result__icon svg {
