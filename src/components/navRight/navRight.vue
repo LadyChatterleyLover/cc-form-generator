@@ -19,8 +19,8 @@
             <time-picker-attrs v-if="current.type === 'time-picker'"></time-picker-attrs>
             <time-select-attrs v-if="current.type === 'time-select'"></time-select-attrs>
 
-            <el-divider>正则校验</el-divider>
-            <validate></validate>
+            <!-- <el-divider>正则校验</el-divider>
+            <validate></validate> -->
           </div>
           <div v-else style="position: relative; top: 150px">
             <el-result title="还没有数据喔" sub-title="赶快拖拽组件来生成你的表单吧">
