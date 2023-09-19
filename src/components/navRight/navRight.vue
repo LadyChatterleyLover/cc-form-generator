@@ -1,7 +1,7 @@
 <template>
-  <el-scrollbar class="right nav-right-tabs">
-    <el-tabs v-model="activeName">
-      <el-tab-pane label="组件属性" name="component">
+  <el-scrollbar class="right nav-right-tabs height">
+    <el-tabs v-model="activeName" class="height">
+      <el-tab-pane label="组件属性" name="component" class="height">
         <div class="container">
           <div style="padding: 10px" v-if="current">
             <input-attrs v-if="current.type === 'input'"></input-attrs>
@@ -318,7 +318,6 @@
 import { computed, ComputedRef, ref } from 'vue'
 import { useStore } from 'vuex'
 import { ComponentItem } from '@/types'
-import validate from '../validate/Validate.vue'
 import formAttrs from '../formAttrs/FormAttrs.vue'
 import inputAttrs from '../componentAttrs/inputAttrs/index.vue'
 import buttonAttrs from '../componentAttrs/buttonAttrs/index.vue'
@@ -354,5 +353,8 @@ const current: ComputedRef<ComponentItem> = computed(() => store.state.currentCo
 .el-result__icon svg {
   width: auto;
   height: auto;
+}
+.height {
+  height: calc(100vh - 40px);
 }
 </style>
