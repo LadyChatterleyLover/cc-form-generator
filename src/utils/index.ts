@@ -22,7 +22,7 @@ export function indent(str, num, len = 2) {
     for (let i = 0; i < num * len; i++) spaces += ' '
   }
 
-  str.split('\n').forEach((line) => {
+  str.split('\n').forEach(line => {
     line = isLeft ? line.replace(reg, '') : spaces + line
     result.push(line)
   })
@@ -31,12 +31,12 @@ export function indent(str, num, len = 2) {
 
 // 首字母大小
 export function titleCase(str) {
-  return str.replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
+  return str.replace(/( |^)[a-z]/g, L => L.toUpperCase())
 }
 
 // 下划转驼峰
 export function camelCase(str) {
-  return str.replace(/-[a-z]/g, (str1) => str1.substr(-1).toUpperCase())
+  return str.replace(/-[a-z]/g, str1 => str1.substr(-1).toUpperCase())
 }
 
 export function isNumberStr(str) {
@@ -121,82 +121,28 @@ export const beautifierConf = {
   },
 }
 
-function stringify(obj) {
-  return JSON.stringify(obj, (key, val) => {
-    if (typeof val === 'function') {
-      return `${val}`
+export function parseJson(jsonStr) {
+  return JSON.parse(jsonStr, (k, v) => {
+    try {
+      // 将正则字符串转成正则对象
+      if (eval(v) instanceof RegExp) {
+        return eval(v)
+      }
+    } catch (e) {
+      // nothing
     }
-    return val
-  })
-}
 
-function parse(str) {
-  JSON.parse(str, (k, v) => {
-    if (v.indexOf && v.indexOf('function') > -1) {
-      return eval(`(${v})`)
-    }
     return v
   })
 }
 
-export function jsonClone(obj) {
-  return parse(stringify(obj))
-}
-
-// 深拷贝对象
-export function deepClone(obj) {
-  const _toString = Object.prototype.toString
-
-  // null, undefined, non-object, function
-  if (!obj || typeof obj !== 'object') {
-    return obj
-  }
-
-  // DOM Node
-  if (obj.nodeType && 'cloneNode' in obj) {
-    return obj.cloneNode(true)
-  }
-
-  // Date
-  if (_toString.call(obj) === '[object Date]') {
-    return new Date(obj.getTime())
-  }
-
-  // RegExp
-  if (_toString.call(obj) === '[object RegExp]') {
-    const flags = []
-    if (obj.global) {
-      flags.push('g')
-    }
-    if (obj.multiline) {
-      flags.push('m')
-    }
-    if (obj.ignoreCase) {
-      flags.push('i')
+export function stringifyJson(json) {
+  return JSON.stringify(json, (k, v) => {
+    // 将正则对象转换为正则字符串
+    if (v instanceof RegExp) {
+      return v.toString()
     }
 
-    return new RegExp(obj.source, flags.join(''))
-  }
-
-  const result = Array.isArray(obj) ? [] : obj.constructor ? new obj.constructor() : {}
-
-  for (const key in obj) {
-    result[key] = deepClone(obj[key])
-  }
-
-  return result
-}
-
-const toStr = Function.prototype.call.bind(Object.prototype.toString)
-export function isObjectObject(t) {
-  return toStr(t) === '[object Object]'
-}
-export function isObjectArray(t) {
-  return toStr(t) === '[object Array]'
-}
-export function isObjectNull(t) {
-  return toStr(t) === '[object Null]'
-}
-export function isObjectUnde(t) {
-  return toStr(t) === '[object Undefined]'
+    return v
+  })
 }

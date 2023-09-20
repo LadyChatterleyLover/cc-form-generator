@@ -14,17 +14,17 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
   let rules = {}
   let cloneAttrs: any = {}
   if (componentList && componentList.length) {
-    let isValue = componentList.find((item) => item.field || (item.attrs as any).seriesData)
+    let isValue = componentList.find(item => item.field || (item.attrs as any).seriesData)
     if (isValue)
       script = `import {ref} from 'vue'
   `
-    componentList.map((item) => {
+    componentList.map(item => {
       cloneAttrs = cloneDeep(item.attrs)
       if (item.field) {
         formData[item.field] = item.value
         if (item.rules) {
           let cloneRules = cloneDeep(item.rules)
-          cloneRules.map((item) => {
+          cloneRules.map(item => {
             if (item.pattern) {
               item.pattern = new RegExp((item.pattern as string).slice(1, -1))
             }
@@ -57,7 +57,7 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
       }
       if (item.children && item.children.length && item.type !== 'cascader') {
         let childAttrs = ``
-        item.children!.map((child) => {
+        item.children!.map(child => {
           for (let i in child.attrs) {
             if ((child.attrs as any)[i]) {
               for (let j in child.defaultProps) {
@@ -128,21 +128,21 @@ export const getCode = (componentList: ComponentItem[]) => {
   let props = ''
   let options = ''
   if (componentList && componentList.length) {
-    let isValue = componentList.find((item) => item.field || (item.attrs as any).seriesData)
+    let isValue = componentList.find(item => item.field || (item.attrs as any).seriesData)
     if (isValue) script = ``
-    componentList.map((item) => {
+    componentList.map(item => {
       cloneAttrs = cloneDeep(item.attrs)
       if (item.field) {
         formData[item.field] = item.value
         if (item.rules) {
           let cloneRules = cloneDeep(item.rules)
           let cloneRules1 = cloneDeep(item.rules)
-          cloneRules.map((item) => {
+          cloneRules.map(item => {
             if (item.pattern) {
               item.pattern = new RegExp((item.pattern as string).slice(1, -1))
             }
           })
-          cloneRules1.map((item) => {
+          cloneRules1.map(item => {
             if (item.pattern) {
               item.pattern = (item.pattern as string).slice(1, -1)
             }
@@ -176,7 +176,7 @@ export const getCode = (componentList: ComponentItem[]) => {
       }
       if (item.children && item.children.length && item.type !== 'cascader') {
         let childAttrs = ``
-        item.children!.map((child) => {
+        item.children!.map(child => {
           for (let i in child.attrs) {
             if ((child.attrs as any)[i]) {
               for (let j in child.defaultProps) {

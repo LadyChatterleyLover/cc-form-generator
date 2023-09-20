@@ -134,7 +134,7 @@ const clickItem = (item: ListItem) => {
 }
 
 const comfirm = () => {
-  form.value?.validate((valid) => {
+  form.value?.validate(valid => {
     if (valid) {
       const str = vueTemplate(componentList.value)
       const blob = new Blob([str!], { type: 'text/plain;charset=utf-8' })

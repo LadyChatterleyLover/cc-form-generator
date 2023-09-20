@@ -140,8 +140,8 @@ const onOpen = () => {
   jsCode.value = getCode(componentList.value).script
   cssCode.value = getCode(componentList.value).style
   htmlCode.value = beautify.html(htmlCode.value, beautifierConf.html)
-  jsCode.value = beautify.js(jsCode.value, beautifierConf.js)
-  cssCode.value = beautify.js(cssCode.value, beautifierConf.css)
+  jsCode.value = beautify.js(jsCode.value, (beautifierConf as any).js)
+  cssCode.value = beautify.js(cssCode.value, (beautifierConf as any).css)
   code.value = activeTab.value === 'html' ? htmlCode.value : activeTab.value === 'js' ? jsCode.value : cssCode.value
   language.value = mode[activeTab.value]
   runCode()
@@ -181,7 +181,7 @@ const iframeLoad = () => {
 }
 
 const comfirm = () => {
-  form.value?.validate((valid) => {
+  form.value?.validate(valid => {
     if (valid) {
       const str = vueTemplate(componentList.value)
       const blob = new Blob([str!], { type: 'text/plain;charset=utf-8' })
@@ -217,7 +217,7 @@ const copyCode = () => {
 
 watch(
   () => props.visible,
-  (val) => {
+  val => {
     drawerVisible.value = val
   }
 )

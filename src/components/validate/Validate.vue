@@ -50,7 +50,7 @@ const addRule = () => {
 
 watch(
   () => current.value,
-  (val) => {
+  val => {
     localStorage.setItem('currentComponent', JSON.stringify(val))
     store.commit('setCurrentComponent', val)
   },

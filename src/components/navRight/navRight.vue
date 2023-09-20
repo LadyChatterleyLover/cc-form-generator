@@ -318,6 +318,7 @@
 import { computed, ComputedRef, ref } from 'vue'
 import { useStore } from 'vuex'
 import { ComponentItem } from '@/types'
+import validate from '../validate/Validate.vue'
 import formAttrs from '../formAttrs/FormAttrs.vue'
 import inputAttrs from '../componentAttrs/inputAttrs/index.vue'
 import buttonAttrs from '../componentAttrs/buttonAttrs/index.vue'

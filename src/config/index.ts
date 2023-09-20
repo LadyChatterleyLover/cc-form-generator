@@ -49,6 +49,7 @@ export const components: ComponentItem[] = [
     icon: 'Notification',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       text: false,
       plain: false,
@@ -85,6 +86,7 @@ export const components: ComponentItem[] = [
     field: 'inputNumber',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       step: 1,
       stepStrictly: false,
@@ -115,6 +117,7 @@ export const components: ComponentItem[] = [
     field: 'switch',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       disabled: false,
       loading: false,
@@ -152,6 +155,7 @@ export const components: ComponentItem[] = [
     labelWidth: 90,
     value: 3,
     field: 'star',
+    rules: [],
     defaultProps: {
       max: 5,
       disabled: false,
@@ -181,6 +185,7 @@ export const components: ComponentItem[] = [
     label: '取色器',
     value: '',
     field: 'color',
+    rules: [],
     showLabel: true,
     labelWidth: 90,
     defaultProps: {
@@ -204,6 +209,7 @@ export const components: ComponentItem[] = [
     field: 'slider',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       step: 1,
       disabled: false,
@@ -239,6 +245,7 @@ export const components: ComponentItem[] = [
     field: 'radio',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       textColor: '#ffffff',
       fill: '#409EFF',
@@ -289,6 +296,7 @@ export const components: ComponentItem[] = [
     field: 'checkbox',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       textColor: '#ffffff',
       fill: '#409EFF',
@@ -357,6 +365,7 @@ export const components: ComponentItem[] = [
     field: 'select',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       multiple: false,
       disabled: false,
@@ -419,6 +428,7 @@ export const components: ComponentItem[] = [
     field: 'cascader',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       size: 'default',
       placeholder: '请选择',
@@ -477,6 +487,7 @@ export const components: ComponentItem[] = [
     field: 'timePicker',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       format: 'HH:mm:ss',
       readonly: false,
@@ -513,6 +524,7 @@ export const components: ComponentItem[] = [
     field: 'timePicker',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       format: 'YYYY-MM-DD',
       readonly: false,
@@ -548,6 +560,7 @@ export const components: ComponentItem[] = [
     field: 'timeSelect',
     showLabel: true,
     labelWidth: 90,
+    rules: [],
     defaultProps: {
       readonly: false,
       disabled: false,
