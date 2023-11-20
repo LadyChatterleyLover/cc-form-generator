@@ -50,6 +50,7 @@ export const components: ComponentItem[] = [
     showLabel: true,
     labelWidth: 90,
     rules: [],
+    field: 'button',
     defaultProps: {
       text: false,
       plain: false,

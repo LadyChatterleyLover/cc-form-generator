@@ -9,6 +9,7 @@
         :model="model"
         :rules="rules"
         :validate-on-rule-change="false"
+        v-if="componentList && componentList.length"
       >
         <template v-for="(item, index) in componentList" :key="index">
           <el-form-item
@@ -140,6 +141,9 @@
           </el-form-item>
         </template>
       </el-form>
+      <div class="h-[70%] flex justify-center items-center text-2xl text-[#ccb1ea]">
+        从左侧拖入或点选组件进行表单设计
+      </div>
     </div>
   </div>
 </template>
