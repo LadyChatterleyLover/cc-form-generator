@@ -1,8 +1,8 @@
 <template>
-  <el-scrollbar class="right nav-right-tabs height">
+  <el-scrollbar class="h-full pb-[50px] nav-right-tabs height" style="border-left: 1px solid #eee">
     <el-tabs v-model="activeName" class="height">
       <el-tab-pane label="组件属性" name="component" class="height">
-        <div class="container">
+        <div class="h-full">
           <div style="padding: 10px" v-if="current">
             <input-attrs v-if="current.type === 'input'"></input-attrs>
             <button-attrs v-if="current.type === 'button'"></button-attrs>
@@ -344,12 +344,7 @@ const current: ComputedRef<ComponentItem> = computed(() => store.state.currentCo
 
 <style scoped lang="scss">
 .right {
-  height: 100%;
   border-left: 1px solid #eee;
-  padding-bottom: 50px;
-  .container {
-    height: 100%;
-  }
 }
 .el-result__icon svg {
   width: auto;

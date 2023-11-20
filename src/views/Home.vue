@@ -1,56 +1,29 @@
 <template>
-  <div class="container">
-    <div class="content">
-      <div class="header">
+  <div class="h-full flex overflow-hidden">
+    <div class="h-full flex-1">
+      <div class="h-[50px]">
         <nav-header></nav-header>
       </div>
-      <div class="edit">
-        <div class="left">
+      <div class="flex h-full">
+        <div class="w-[300px]">
           <nav-left></nav-left>
         </div>
-        <div class="main">
+        <div class="flex-1">
           <nav-main></nav-main>
         </div>
       </div>
     </div>
-    <div class="right">
+    <div class="w-[380px]">
       <nav-right></nav-right>
     </div>
   </div>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import navHeader from '../components/navHeader/navHeader.vue'
 import navLeft from '../components/navLeft/navLeft.vue'
 import navRight from '../components/navRight/navRight.vue'
 import navMain from '../components/navMain/navMain.vue'
-
 </script>
 
-<style lang='scss' scoped>
-.container {
-  height: 100%;
-  display: flex;
-  overflow: hidden;
-  .header {
-    height: 50px;
-  }
-  .content {
-    height: 100%;
-    flex: 1;
-    .edit {
-      display: flex;
-      height: 100%;
-    }
-    .main {
-      flex: 1;
-    }
-    .left {
-      width: 300px;
-    }
-  }
-  .right {
-    width: 380px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

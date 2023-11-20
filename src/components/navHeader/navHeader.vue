@@ -1,16 +1,21 @@
 <template>
-  <div class="header">
-    <div class="logo">
+  <div class="flex items-center justify-between px-5 h-[50px]" style="border-bottom: 1px solid #eee">
+    <div class="flex items-center leading-[30px] text-[#00afff] font-[600] text-lg">
       <div>cc-form-generator</div>
       <div>
-        <a href="https://github.com/LadyChatterleyLover/cc-h5" target="_blank" class="github">
-          <img src="https://github.githubassets.com/pinned-octocat.svg" />
+        <a href="https://github.com/LadyChatterleyLover/cc-h5" target="_blank" class="inline-block align-sub ml-4">
+          <img src="https://github.githubassets.com/pinned-octocat.svg" class="w-6 h-6 relative top-1" />
         </a>
       </div>
     </div>
-    <div class="icons">
-      <div class="item" @click="clickItem(item)" v-for="(item, index) in list" :key="index">
-        <div class="icon">
+    <div class="flex items-center flex-1 justify-end">
+      <div
+        class="flex items-center mr-4 cursor-pointer text-[#409eff] last:text-[#f56c6c]"
+        @click="clickItem(item)"
+        v-for="(item, index) in list"
+        :key="index"
+      >
+        <div class="mr-1 relative top-[2px]">
           <component :is="item.icon"></component>
         </div>
         <div>{{ item.name }}</div>
@@ -153,52 +158,4 @@ const cancel = () => {
 }
 </script>
 
-<style scoped lang="scss">
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #eee;
-  padding: 0 20px;
-  height: 50px;
-  .logo {
-    display: flex;
-    align-items: center;
-    line-height: 30px;
-    color: #00afff;
-    font-weight: 600;
-    font-size: 17px;
-    .github {
-      display: inline-block;
-      vertical-align: sub;
-      margin-left: 15px;
-    }
-    img {
-      height: 22px;
-      position: relative;
-      top: 1px;
-    }
-  }
-  .icons {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    justify-content: flex-end;
-    .item {
-      display: flex;
-      align-items: center;
-      margin-right: 15px;
-      color: #409eff;
-      cursor: pointer;
-      &:last-child {
-        color: #f56c6c;
-      }
-      .icon {
-        margin-right: 3px;
-        position: relative;
-        top: 2px;
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>

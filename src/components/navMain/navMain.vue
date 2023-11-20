@@ -1,6 +1,6 @@
 <template>
-  <div class="main">
-    <div class="editor" @drop="drop" @dragover="dragover">
+  <div class="w-full h-full relative">
+    <div class="w-full h-full p-5" @drop="drop" @dragover="dragover">
       <el-form
         :label-position="formAttrs?.labelPosition"
         :label-width="`${formAttrs?.labelWidth}px`"
@@ -12,7 +12,7 @@
       >
         <template v-for="(item, index) in componentList" :key="index">
           <el-form-item
-            class="item"
+            class="p-5 relative"
             :prop="item.field"
             :class="{ active: activeIndex === index, 'rate-form-item-align-center': item.type === 'rate' }"
             :label="item.showLabel ? item.label : ''"
@@ -129,7 +129,7 @@
               <template #prepend v-if="item.type === 'input' && item.prefix">{{ item.prefix }}</template>
               <template #append v-if="item.type === 'input' && item.suffix">{{ item.suffix }}</template>
             </component>
-            <div class="btn" v-if="activeIndex === index">
+            <div class="absolute top-[-35px] right-[10px] z-[999]" v-if="activeIndex === index">
               <el-tooltip content="复制">
                 <el-button @click.stop="copy(item)" size="small" circle :icon="Edit" plain type="primary"></el-button>
               </el-tooltip>
@@ -241,7 +241,7 @@ onMounted(() => {
 
 watch(
   () => currentComponent.value,
-  (val) => {
+  val => {
     localStorage.setItem('currentComponent', JSON.stringify(val))
     store.commit('setCurrentComponent', val)
 
@@ -256,14 +256,14 @@ watch(
 
 watch(
   () => componentList.value,
-  (val) => {
+  val => {
     if (val && val.length) {
-      val.map((item) => {
+      val.map(item => {
         rules.value = {}
         let cloneRules: RuleItem[] = []
         if (item.rules) {
           cloneRules = cloneDeep(item.rules)
-          cloneRules.map((item) => {
+          cloneRules.map(item => {
             if (item.pattern) {
               item.pattern = new RegExp((item.pattern as string).slice(1, -1))
             }
@@ -279,26 +279,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.main {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-.editor {
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  .item {
-    padding: 20px;
-    position: relative;
-    .btn {
-      position: absolute;
-      top: -35px;
-      right: 10px;
-      z-index: 999;
-    }
-  }
-}
 .active {
   background: #f6f7ff;
 }

@@ -1,7 +1,7 @@
 <template>
   <el-drawer size="100%" v-model="drawerVisible" :with-header="false" @opened="onOpen" @close="onClose">
-    <div class="container">
-      <div class="item">
+    <div class="flex h-full overflow-hidden">
+      <div class="flex-1 last:bg-[#1e1e1e] last:text-white">
         <el-tabs v-model="activeTab" type="card" @tab-change="changeTab">
           <el-tab-pane name="html">
             <template #label>
@@ -25,26 +25,30 @@
             </template>
           </el-tab-pane>
         </el-tabs>
-        <div class="editor" v-if="code">
+        <div class="h-full" v-if="code">
           <MonacoEditor v-model="code" :language="language" theme="vs-dark" @change="changeEditor"></MonacoEditor>
         </div>
       </div>
-      <div class="item">
-        <div class="action">
-          <div class="action-item" @click="runCode">
-            <div><Refresh /></div>
+      <div>
+        <div class="flex items-center h-[33px] bg-[#f2fafb] px-[30px]">
+          <div class="flex items-center mr-5 text-[#8285f5] cursor-pointer text-sm" @click="runCode">
+            <div><Refresh class="mr-1 relative top-[2px]" /></div>
             <div>刷新</div>
           </div>
-          <div class="action-item" @click="download">
-            <div><Download /></div>
+          <div class="flex items-center mr-5 text-[#8285f5] cursor-pointer text-sm" @click="download">
+            <div><Download class="mr-1 relative top-[2px]" /></div>
             <div>下载vue文件</div>
           </div>
-          <div class="action-item" @click="copyCode">
-            <div><DocumentCopy /></div>
+          <div class="flex items-center mr-5 text-[#8285f5] cursor-pointer text-sm" @click="copyCode">
+            <div><DocumentCopy class="mr-1 relative top-[2px]" /></div>
             <div>复制代码</div>
           </div>
-          <div class="action-item" style="color: #f56c6c" @click="onClose">
-            <div><Close /></div>
+          <div
+            class="flex items-center mr-5 text-[#8285f5] cursor-pointer text-sm"
+            style="color: #f56c6c"
+            @click="onClose"
+          >
+            <div><Close class="mr-1 relative top-[2px]" /></div>
             <div>关闭</div>
           </div>
         </div>
@@ -56,7 +60,12 @@
           src="preview.html"
           @load="iframeLoad"
         />
-        <div v-show="!isIframeLoaded" v-loading="true" class="result-wrapper" />
+        <div
+          v-show="!isIframeLoaded"
+          v-loading="true"
+          class="w-full p-3 overflow-auto box-border"
+          style="height: calc(100vh - 33px)"
+        />
       </div>
     </div>
   </el-drawer>

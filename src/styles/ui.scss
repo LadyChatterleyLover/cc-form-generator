@@ -28,3 +28,19 @@
     justify-content: center;
   }
 }
+
+.cc-choose-icon-dialog-body-height {
+  .el-dialog__body {
+    height: 500px;
+    overflow: scroll;
+  }
+}
+.el-input__prefix {
+  align-items: center;
+}
+.rate-form-item-align-center {
+  .el-rate__item {
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,38 +1,37 @@
 <template>
   <div class="cc-choose-icon-dialog-body-height">
     <el-dialog :title="title" v-model="dialogVisible">
-      <div class="container">
+      <div class="flex flex-wrap items-center">
         <div
-          class="item"
+          class="w-1/4 h-[70px] flex flex-col items-center justify-center mb-5 cursor-pointer"
           v-for="(item, index) in Object.keys(ElIcons)"
           :key="index"
           @click="clickItem(item)"
         >
-          <div class="text">
+          <div class="text-sm">
             <component :is="`el-icon-${toLine(item)}`"></component>
           </div>
-          <div class="icon">{{ item }}</div>
+          <div class="flex-1">{{ item }}</div>
         </div>
       </div>
     </el-dialog>
   </div>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import * as ElIcons from '@element-plus/icons-vue'
 import { watch, ref } from 'vue'
 import { toLine } from '../../utils'
 
 const props = defineProps<{
   // 弹出框的标题
-  title: string,
+  title: string
   // 控制弹出框的显示与隐藏
   visible: boolean
 }>()
 const emits = defineEmits(['update:visible', 'clickItem'])
 // 拷贝一份父组件传递过来的visible
 const dialogVisible = ref<boolean>(props.visible)
-
 
 // 点击图标
 const clickItem = (item: string) => {
@@ -42,37 +41,22 @@ const clickItem = (item: string) => {
 }
 
 // 监听visible的变化 只能监听第一次的变化
-watch(() => props.visible, val => {
-  dialogVisible.value = val
-})
+watch(
+  () => props.visible,
+  val => {
+    dialogVisible.value = val
+  }
+)
 // 监听组件内部的dialogVisible变化
-watch(() => dialogVisible.value, val => {
-  emits('update:visible', val)
-})
+watch(
+  () => dialogVisible.value,
+  val => {
+    emits('update:visible', val)
+  }
+)
 </script>
 
-<style lang='scss' scoped>
-.container {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.item {
-  width: 25%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  cursor: pointer;
-  height: 70px;
-}
-.text {
-  font-size: 14px;
-}
-.icon {
-  flex: 1;
-}
+<style lang="scss" scoped>
 svg {
   width: 2em;
   height: 2em;
