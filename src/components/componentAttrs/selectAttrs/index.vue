@@ -19,6 +19,7 @@
         <el-option value="large" label="大型"></el-option>
       </el-select>
     </el-form-item>
+    <el-divider>选项</el-divider>
     <el-form-item label="选项配置">
       <div style="display: flex; margin-bottom: 10px" v-for="(item, index) in current.children" :key="index">
         <el-input v-model="item.attrs.label" placeholder="请输入导航标题"></el-input>
@@ -66,11 +67,11 @@
 </template>
 
 <script lang="ts" setup>
-import { useStore } from "vuex"
-import { computed, ref, watch } from "vue"
-import { ComponentItem } from "@/types"
-import cloneDeep from "lodash/cloneDeep"
-import { Edit, Delete } from "@element-plus/icons-vue"
+import { useStore } from 'vuex'
+import { computed, ref, watch } from 'vue'
+import { ComponentItem } from '@/types'
+import cloneDeep from 'lodash/cloneDeep'
+import { Edit, Delete } from '@element-plus/icons-vue'
 
 const store = useStore()
 
@@ -98,9 +99,9 @@ const edit = (item: ComponentItem, index: number) => {
 
 const add = () => {
   current.value.children.push({
-    type: "option",
+    type: 'option',
     attrs: {
-      label: "选项" + (current.value.children.length + 1),
+      label: '选项' + (current.value.children.length + 1),
       value: String(current.value.children.length + 1),
       disabled: false,
     },
@@ -113,16 +114,16 @@ const del = (item: ComponentItem, index: number) => {
 
 const changeMultiple = (val: boolean) => {
   const item = cloneDeep(current.value)
-  item.value = val ? [] : ""
-  localStorage.setItem("currentComponent", JSON.stringify(item))
-  store.commit("setCurrentComponent", item)
+  item.value = val ? [] : ''
+  localStorage.setItem('currentComponent', JSON.stringify(item))
+  store.commit('setCurrentComponent', item)
 }
 
 watch(
   () => current.value,
-  (val) => {
-    localStorage.setItem("currentComponent", JSON.stringify(val))
-    store.commit("setCurrentComponent", val)
+  val => {
+    localStorage.setItem('currentComponent', JSON.stringify(val))
+    store.commit('setCurrentComponent', val)
   },
   { deep: true }
 )
