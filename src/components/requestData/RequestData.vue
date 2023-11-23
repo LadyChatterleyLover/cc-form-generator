@@ -40,8 +40,8 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button @click="close">取消</el-button>
-      <el-button type="primary" @click="confirm">确定</el-button>
+      <el-button @click="close" :disabled="loading">取消</el-button>
+      <el-button type="primary" @click="confirm" :disabled="loading">确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -66,6 +66,7 @@ import { useStore } from 'vuex'
 const store = useStore()
 
 const visible = ref(false)
+const loading = ref(false)
 
 const current = ref<ComponentItem>()
 const childType = ref('')
@@ -94,6 +95,7 @@ const close = () => {
 const confirm = () => {
   let url = model.value.url
   let params = {}
+  loading.value = true
   if (model.value.method === 'get') {
     url += model.value.params ? `?${model.value.params}` : ''
     axios[model.value.method](url)
@@ -106,12 +108,15 @@ const confirm = () => {
           },
           type: childType.value,
         }))
+        ElMessage.success('加载成功')
         close()
-        console.log('res', res.data)
       })
       .catch(err => {
         console.log('err', err)
         ElMessage.error('请求出错')
+      })
+      .finally(() => {
+        loading.value = false
       })
   } else {
     if (model.value.params) {
@@ -122,10 +127,22 @@ const confirm = () => {
       })
       axios[model.value.method](url, params)
         .then(res => {
-          console.log('res', res.data)
+          const data = model.value.name ? res.data[model.value.name] : res.data
+          current.value.children = data.map(item => ({
+            attrs: {
+              label: item[model.value.label],
+              value: item[model.value.value],
+            },
+            type: childType.value,
+          }))
+          ElMessage.success('加载成功')
+          close()
         })
         .catch(() => {
           ElMessage.error('请求出错')
+        })
+        .finally(() => {
+          loading.value = false
         })
     }
   }
