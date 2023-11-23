@@ -20,13 +20,22 @@
       </el-select>
     </el-form-item>
     <el-divider>选项</el-divider>
-    <el-form-item label="选项配置">
+    <el-form-item label="数据来源">
+      <el-radio-group v-model="dataFlag">
+        <el-radio label="1">固定选项</el-radio>
+        <el-radio label="2">远程加载</el-radio>
+      </el-radio-group>
+    </el-form-item>
+    <el-form-item label="选项配置" v-if="dataFlag === '1'">
       <div style="display: flex; margin-bottom: 10px" v-for="(item, index) in current.children" :key="index">
         <el-input v-model="item.attrs.label" placeholder="请输入导航标题"></el-input>
         <el-button style="margin: 0 3px" @click="edit(item, index)" type="primary" circle :icon="Edit"></el-button>
         <el-button @click="del(item, index)" type="danger" circle :icon="Delete"></el-button>
       </div>
       <el-button type="primary" size="small" @click="add">添加选项</el-button>
+    </el-form-item>
+    <el-form-item v-else>
+      <el-button type="primary" size="small">点击远程数据</el-button>
     </el-form-item>
     <el-divider></el-divider>
     <el-form-item label="显示标签">
@@ -79,6 +88,7 @@ const current: any = computed(() => store.state.currentComponent)
 const editVisible = ref<boolean>(false)
 const currentItem = ref<any>()
 const currentIndex = ref<number>(0)
+const dataFlag = ref('2')
 
 const ok = () => {
   editVisible.value = false

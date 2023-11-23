@@ -141,7 +141,7 @@
           </el-form-item>
         </template>
       </el-form>
-      <div class="h-[70%] flex justify-center items-center text-2xl text-[#ccb1ea]">
+      <div class="h-[70%] flex justify-center items-center text-2xl text-[#ccb1ea]" v-else>
         从左侧拖入或点选组件进行表单设计
       </div>
     </div>
