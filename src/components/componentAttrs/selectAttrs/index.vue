@@ -21,7 +21,7 @@
     </el-form-item>
     <el-divider>选项</el-divider>
     <el-form-item label="数据来源">
-      <el-radio-group v-model="dataFlag">
+      <el-radio-group v-model="dataFlag" @change="changeDataFlag">
         <el-radio label="1">固定选项</el-radio>
         <el-radio label="2">远程加载</el-radio>
       </el-radio-group>
@@ -30,12 +30,12 @@
       <div style="display: flex; margin-bottom: 10px" v-for="(item, index) in current.children" :key="index">
         <el-input v-model="item.attrs.label" placeholder="请输入导航标题"></el-input>
         <el-button style="margin: 0 3px" @click="edit(item, index)" type="primary" circle :icon="Edit"></el-button>
-        <el-button @click="del(item, index)" type="danger" circle :icon="Delete"></el-button>
+        <el-button @click="del(index)" type="danger" circle :icon="Delete"></el-button>
       </div>
       <el-button type="primary" size="small" @click="add">添加选项</el-button>
     </el-form-item>
     <el-form-item v-else>
-      <el-button type="primary" size="small">点击远程数据</el-button>
+      <el-button type="primary" size="small" @click="open">点击远程数据</el-button>
     </el-form-item>
     <el-divider></el-divider>
     <el-form-item label="显示标签">
@@ -73,6 +73,8 @@
       <el-button type="primary" @click="ok">确认</el-button>
     </template>
   </el-dialog>
+
+  <RequestData ref="RequestDataRef"></RequestData>
 </template>
 
 <script lang="ts" setup>
@@ -81,6 +83,7 @@ import { computed, ref, watch } from 'vue'
 import { ComponentItem } from '@/types'
 import cloneDeep from 'lodash/cloneDeep'
 import { Edit, Delete } from '@element-plus/icons-vue'
+import RequestData from '../../requestData/RequestData.vue'
 
 const store = useStore()
 
@@ -88,7 +91,8 @@ const current: any = computed(() => store.state.currentComponent)
 const editVisible = ref<boolean>(false)
 const currentItem = ref<any>()
 const currentIndex = ref<number>(0)
-const dataFlag = ref('2')
+const dataFlag = ref('1')
+const RequestDataRef = ref()
 
 const ok = () => {
   editVisible.value = false
@@ -118,7 +122,7 @@ const add = () => {
   })
 }
 
-const del = (item: ComponentItem, index: number) => {
+const del = (index: number) => {
   current.value.children.splice(index, 1)
 }
 
@@ -127,6 +131,33 @@ const changeMultiple = (val: boolean) => {
   item.value = val ? [] : ''
   localStorage.setItem('currentComponent', JSON.stringify(item))
   store.commit('setCurrentComponent', item)
+}
+
+const open = () => {
+  RequestDataRef.value?.open(current.value, 'option')
+}
+
+const changeDataFlag = (val: string) => {
+  if (val === '1') {
+    current.value.children = [
+      {
+        type: 'option',
+        attrs: {
+          label: '选项1',
+          value: 1,
+          disabled: false,
+        },
+      },
+      {
+        type: 'option',
+        attrs: {
+          label: '选项2',
+          value: 2,
+          disabled: false,
+        },
+      },
+    ]
+  }
 }
 
 watch(
