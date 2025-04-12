@@ -1,6 +1,6 @@
 // 把驼峰转换成横杠连接
 export const toLine = (value: string) => {
-  return value.replace(/[A-Z]g/, '-$1').toLocaleLowerCase()
+  return value.replace(/[A-Z]g/, "-$1").toLocaleLowerCase()
 }
 
 /**
@@ -14,44 +14,44 @@ export function indent(str, num, len = 2) {
   const isLeft = num < 0
   const result = []
   let reg
-  let spaces = ''
+  let spaces = ""
   if (isLeft) {
     num *= -1
-    reg = new RegExp(`(^\\s{0,${num * len}})`, 'g')
+    reg = new RegExp(`(^\\s{0,${num * len}})`, "g")
   } else {
-    for (let i = 0; i < num * len; i++) spaces += ' '
+    for (let i = 0; i < num * len; i++) spaces += " "
   }
 
-  str.split('\n').forEach(line => {
-    line = isLeft ? line.replace(reg, '') : spaces + line
+  str.split("\n").forEach((line) => {
+    line = isLeft ? line.replace(reg, "") : spaces + line
     result.push(line)
   })
-  return result.join('\n')
+  return result.join("\n")
 }
 
 // 首字母大小
 export function titleCase(str) {
-  return str.replace(/( |^)[a-z]/g, L => L.toUpperCase())
+  return str.replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
 }
 
 // 下划转驼峰
 export function camelCase(str) {
-  return str.replace(/-[a-z]/g, str1 => str1.substr(-1).toUpperCase())
+  return str.replace(/-[a-z]/g, (str1) => str1.substr(-1).toUpperCase())
 }
 
 export function isNumberStr(str) {
   return /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g.test(str)
 }
 
-export const exportDefault = 'export default '
+export const exportDefault = "export default "
 
 export const beautifierConf = {
   html: {
     indent_size: 2,
-    indent_char: ' ',
+    indent_char: " ",
     indent_with_tabs: false,
     editorconfig: false,
-    eol: '\n',
+    eol: "\n",
     end_with_newline: false,
     indent_level: 0,
     preserve_newlines: true,
@@ -61,7 +61,7 @@ export const beautifierConf = {
     jslint_happy: false,
     space_after_anon_function: false,
     space_after_named_function: false,
-    brace_style: 'collapse',
+    brace_style: "collapse",
     unindent_chained_methods: false,
     break_chained_methods: false,
     keep_array_indentation: false,
@@ -69,16 +69,16 @@ export const beautifierConf = {
     wrap_line_length: 0,
     e4x: false,
     comma_first: false,
-    operator_position: 'before-newline',
+    operator_position: "before-newline",
     indent_empty_lines: false,
-    templating: ['auto'],
+    templating: ["auto"]
   },
   js: {
     indent_size: 2,
-    indent_char: ' ',
+    indent_char: " ",
     indent_with_tabs: false,
     editorconfig: false,
-    eol: '\n',
+    eol: "\n",
     end_with_newline: false,
     indent_level: 0,
     preserve_newlines: true,
@@ -88,7 +88,7 @@ export const beautifierConf = {
     jslint_happy: false,
     space_after_anon_function: false,
     space_after_named_function: false,
-    brace_style: 'collapse',
+    brace_style: "collapse",
     unindent_chained_methods: false,
     break_chained_methods: false,
     keep_array_indentation: false,
@@ -96,29 +96,29 @@ export const beautifierConf = {
     wrap_line_length: 0,
     e4x: false,
     comma_first: false,
-    operator_position: 'before-newline',
+    operator_position: "before-newline",
     indent_empty_lines: false,
-    templating: ['auto'],
+    templating: ["auto"]
   },
   css: {
-    indent_size: '2',
-    indent_char: ' ',
-    max_preserve_newlines: '-1',
+    indent_size: "2",
+    indent_char: " ",
+    max_preserve_newlines: "-1",
     preserve_newlines: false,
     keep_array_indentation: false,
     break_chained_methods: false,
-    indent_scripts: 'normal',
-    brace_style: 'end-expand',
+    indent_scripts: "normal",
+    brace_style: "end-expand",
     space_before_conditional: true,
     unescape_strings: false,
     jslint_happy: true,
     end_with_newline: true,
-    wrap_line_length: '110',
+    wrap_line_length: "110",
     indent_inner_html: true,
     comma_first: false,
     e4x: true,
-    indent_empty_lines: true,
-  },
+    indent_empty_lines: true
+  }
 }
 
 export function parseJson(jsonStr) {
@@ -145,4 +145,28 @@ export function stringifyJson(json) {
 
     return v
   })
+}
+
+export function stringToRegExp(str: string) {
+  // 基础格式校验
+  if (typeof str !== "string" || str.length < 2) {
+    throw new Error("必须以斜杠开头且长度≥2")
+  }
+
+  // 查找最后一个斜杠位置
+  const lastSlashIndex = str.lastIndexOf("/")
+  if (lastSlashIndex === 0) {
+    throw new Error("缺少结束斜杠")
+  }
+
+  // 提取模式和标志
+  const pattern = str.slice(1, lastSlashIndex)
+  const flags = str.slice(lastSlashIndex + 1)
+
+  // 创建正则表达式对象
+  try {
+    return new RegExp(pattern, flags)
+  } catch (e) {
+    throw new Error(`正则表达式语法错误: ${e.message}`)
+  }
 }

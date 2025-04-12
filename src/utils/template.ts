@@ -1,11 +1,11 @@
-import { ComponentItem } from '@/types'
-import cloneDeep from 'lodash/cloneDeep'
-import { beautifierConf } from '.'
-import beautify from 'js-beautify'
-import { RuleItem } from '@/types/rules'
+import {ComponentItem} from "@/types"
+import cloneDeep from "lodash/cloneDeep"
+import {beautifierConf, stringToRegExp} from "."
+import beautify from "js-beautify"
+import {RuleItem} from "@/types/rules"
 
 export const vueTemplate = (componentList: ComponentItem[]) => {
-  const formAttrs = JSON.parse(localStorage.getItem('formAttrs'))
+  const formAttrs = JSON.parse(localStorage.getItem("formAttrs"))
   let template = ``
   let attrs = ``
   let script = ``
@@ -14,19 +14,19 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
   let rules = {}
   let cloneAttrs: any = {}
   if (componentList && componentList.length) {
-    let isValue = componentList.find(item => item.field || (item.attrs as any).seriesData)
+    let isValue = componentList.find((item) => item.field || (item.attrs as any).seriesData)
     if (isValue)
       script = `import {ref} from 'vue'
   `
-    componentList.map(item => {
+    componentList.map((item) => {
       cloneAttrs = cloneDeep(item.attrs)
       if (item.field) {
         formData[item.field] = item.value
         if (item.rules) {
           let cloneRules = cloneDeep(item.rules)
-          cloneRules.map(item => {
+          cloneRules.map((item) => {
             if (item.pattern) {
-              item.pattern = new RegExp((item.pattern as string).slice(1, -1))
+              item.pattern = stringToRegExp(item.pattern as string)
             }
           })
           rules[item.field] = cloneRules
@@ -38,30 +38,34 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
             delete cloneAttrs[i]
           }
         }
-        if (i === 'buttonText') {
+        if (i === "buttonText") {
           delete cloneAttrs[i]
         }
-        if (item.type === 'cascader') {
-          delete cloneAttrs['props']
+        if (item.type === "cascader") {
+          delete cloneAttrs["props"]
         }
         attrs += `
       ${
-        typeof cloneAttrs[i] !== 'undefined' && cloneAttrs[i] !== ''
+        typeof cloneAttrs[i] !== "undefined" && cloneAttrs[i] !== ""
           ? `${
-              typeof cloneAttrs[i] === 'boolean'
+              typeof cloneAttrs[i] === "boolean"
                 ? `${cloneAttrs[i] ? i : `:${i}="false"`}`
-                : `${typeof cloneAttrs[i] === 'number' ? `:${i}="${cloneAttrs[i]}"` : `${i}="${cloneAttrs[i]}"`}`
+                : `${
+                    typeof cloneAttrs[i] === "number"
+                      ? `:${i}="${cloneAttrs[i]}"`
+                      : `${i}="${cloneAttrs[i]}"`
+                  }`
             }`
-          : ''
+          : ""
       }`
       }
-      if (item.children && item.children.length && item.type !== 'cascader') {
+      if (item.children && item.children.length && item.type !== "cascader") {
         let childAttrs = ``
-        item.children!.map(child => {
+        item.children!.map((child) => {
           for (let i in child.attrs) {
             if ((child.attrs as any)[i]) {
               for (let j in child.defaultProps) {
-                if (i !== j && child.attrs[i] !== child.defaultProps[j] && i !== 'text') {
+                if (i !== j && child.attrs[i] !== child.defaultProps[j] && i !== "text") {
                   childAttrs = `
               ${i}="${(child.attrs as any)[i]}"`
                 }
@@ -70,33 +74,44 @@ export const vueTemplate = (componentList: ComponentItem[]) => {
           }
           childStr += `
 <el-${child.type} ${childAttrs}>${
-            item.type === 'cascader'
-              ? ''
-              : child.type !== 'option'
+            item.type === "cascader"
+              ? ""
+              : child.type !== "option"
               ? (child.attrs as any).text
               : (child.attrs as any).label
           }</el-${child.type}>`
-          childAttrs = ''
+          childAttrs = ""
         })
       }
       template += `
     <el-form-item label="${item.label}" labelWidth="${item.labelWidth}px">
       <el-${item.type}
-        ${item.field ? 'v-model=' + `"model.${item.field}"` : ''}
-        ${item.type === 'cascader' ? ':props="props"' : ''}
-        ${item.type === 'cascader' ? ':options="options"' : ''}
-        ${attrs}>${childStr}${item.type === 'button' ? (item.attrs as any).buttonText : ''}</el-${item.type}>
+        ${item.field ? "v-model=" + `"model.${item.field}"` : ""}
+        ${item.type === "cascader" ? ':props="props"' : ""}
+        ${item.type === "cascader" ? ':options="options"' : ""}
+        ${attrs}>${childStr}${item.type === "button" ? (item.attrs as any).buttonText : ""}</el-${
+        item.type
+      }>
                      </el-form-item>
     `
       script = `
       import { ref } from 'vue'
       let ${formAttrs.model} = ref(${JSON.stringify(formData)})
-      let ${formAttrs.rules} = ref(${JSON.stringify(rules)})
-      ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
-      ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
+      let ${formAttrs.rules} = ref(${JSON.stringify(rules, (_, value) => {
+        if (value instanceof RegExp) {
+          return `/${value.source}/`
+        }
+        return value
+      })})
+      ${
+        item.type === "cascader"
+          ? `let props = ref(${JSON.stringify((item.attrs as any).props)})`
+          : ""
+      }
+      ${item.type === "cascader" ? `let options = ref(${JSON.stringify(item.children)})` : ""}
       `
-      attrs = ''
-      childStr = ''
+      attrs = ""
+      childStr = ""
     })
   }
   template = beautify.html(template, beautifierConf.html)
@@ -125,26 +140,20 @@ export const getCode = (componentList: ComponentItem[]) => {
   let formData = {}
   let rules = {}
   let cloneStringRules = {}
-  let props = ''
-  let options = ''
+  let props = ""
+  let options = ""
   if (componentList && componentList.length) {
-    let isValue = componentList.find(item => item.field || (item.attrs as any).seriesData)
+    let isValue = componentList.find((item) => item.field || (item.attrs as any).seriesData)
     if (isValue) script = ``
-    componentList.map(item => {
+    componentList.map((item) => {
       cloneAttrs = cloneDeep(item.attrs)
       if (item.field) {
         formData[item.field] = item.value
         if (item.rules) {
           let cloneRules = cloneDeep(item.rules)
-          let cloneRules1 = cloneDeep(item.rules)
-          cloneRules.map(item => {
+          cloneRules.map((item) => {
             if (item.pattern) {
-              item.pattern = new RegExp((item.pattern as string).slice(1, -1))
-            }
-          })
-          cloneRules1.map(item => {
-            if (item.pattern) {
-              item.pattern = (item.pattern as string).slice(1, -1)
+              item.pattern = stringToRegExp(item.pattern as string)
             }
           })
           rules[item.field] = cloneRules
@@ -157,30 +166,34 @@ export const getCode = (componentList: ComponentItem[]) => {
             delete cloneAttrs[i]
           }
         }
-        if (i === 'buttonText' || i === 'props') {
+        if (i === "buttonText" || i === "props") {
           delete cloneAttrs[i]
         }
-        if (item.type === 'cascader') {
-          delete cloneAttrs['props']
+        if (item.type === "cascader") {
+          delete cloneAttrs["props"]
         }
         attrs += `
       ${
-        typeof cloneAttrs[i] !== 'undefined' && cloneAttrs[i] !== ''
+        typeof cloneAttrs[i] !== "undefined" && cloneAttrs[i] !== ""
           ? `${
-              typeof cloneAttrs[i] === 'boolean'
+              typeof cloneAttrs[i] === "boolean"
                 ? `${cloneAttrs[i] ? i : `:${i}="false"`}`
-                : `${typeof cloneAttrs[i] === 'number' ? `:${i}="${cloneAttrs[i]}"` : `${i}="${cloneAttrs[i]}"`}`
+                : `${
+                    typeof cloneAttrs[i] === "number"
+                      ? `:${i}="${cloneAttrs[i]}"`
+                      : `${i}="${cloneAttrs[i]}"`
+                  }`
             }`
-          : ''
+          : ""
       }`
       }
-      if (item.children && item.children.length && item.type !== 'cascader') {
+      if (item.children && item.children.length && item.type !== "cascader") {
         let childAttrs = ``
-        item.children!.map(child => {
+        item.children!.map((child) => {
           for (let i in child.attrs) {
             if ((child.attrs as any)[i]) {
               for (let j in child.defaultProps) {
-                if (i !== j && child.attrs[i] !== child.defaultProps[j] && i !== 'text') {
+                if (i !== j && child.attrs[i] !== child.defaultProps[j] && i !== "text") {
                   childAttrs = `
               ${i}="${(child.attrs as any)[i]}"`
                 }
@@ -190,39 +203,43 @@ export const getCode = (componentList: ComponentItem[]) => {
           childStr += `
           <el-${child.type} ${childAttrs}>
             ${
-              item.type === 'cascader'
-                ? ''
-                : child.type !== 'option'
+              item.type === "cascader"
+                ? ""
+                : child.type !== "option"
                 ? (child.attrs as any).text
                 : (child.attrs as any).label
             }
           </el-${child.type}>`
-          childAttrs = ''
+          childAttrs = ""
         })
       }
-      if (item.type === 'cascader') {
-        props = 'props'
-        options = 'options'
+      if (item.type === "cascader") {
+        props = "props"
+        options = "options"
       }
       template += `
     <el-form-item label="${item.label}" labelWidth="${item.labelWidth}px" prop="${item.field}">
       <el-${item.type}
-      ${item.field ? 'v-model=' + `"model.${item.field}"` : ''}
-      ${item.type === 'cascader' ? ':props="props"' : ''}
+      ${item.field ? "v-model=" + `"model.${item.field}"` : ""}
+      ${item.type === "cascader" ? ':props="props"' : ""}
       ${attrs}
-      ${item.type === 'cascader' ? ':options="options"' : ''}
-      >${childStr}${item.type === 'button' ? (item.attrs as any).buttonText : ''}
+      ${item.type === "cascader" ? ':options="options"' : ""}
+      >${childStr}${item.type === "button" ? (item.attrs as any).buttonText : ""}
       </el-${item.type}>
     </el-form-item>
     `
       script = `
       let model = ref(${JSON.stringify(formData)})
       let rules = ref(${JSON.stringify(cloneStringRules)})
-      ${item.type === 'cascader' ? `let props = ref(${JSON.stringify((item.attrs as any).props)})` : ''}
-      ${item.type === 'cascader' ? `let options = ref(${JSON.stringify(item.children)})` : ''}
+      ${
+        item.type === "cascader"
+          ? `let props = ref(${JSON.stringify((item.attrs as any).props)})`
+          : ""
+      }
+      ${item.type === "cascader" ? `let options = ref(${JSON.stringify(item.children)})` : ""}
       `
-      attrs = ''
-      childStr = ''
+      attrs = ""
+      childStr = ""
     })
   }
   template = beautify.html(template, beautifierConf.html)
@@ -237,12 +254,12 @@ export const getCode = (componentList: ComponentItem[]) => {
           return {
             model,
             rules,
-            ${props ? props + ',' : ''}
-            ${options ? options + ',' : ''}
+            ${props ? props + "," : ""}
+            ${options ? options + "," : ""}
           }
         }
       })
     `,
-    style: '',
+    style: ""
   }
 }
